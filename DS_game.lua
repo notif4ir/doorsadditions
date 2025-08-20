@@ -1,3 +1,5 @@
+task.wait(10)
+
 if not game.Workspace:FindFirstChild("CurrentRooms") then
     warn("Not in a Doors game, returning")
     return
@@ -41,6 +43,7 @@ end
 
 local function setupRoom(room)
     spawn(function()
+        repeat wait() until room:FindFirstChild("Door")
         local door = room:FindFirstChild("Door")
         if door then
             local db = false
@@ -121,5 +124,6 @@ end
 for _, obj in ipairs(game.Workspace:GetChildren()) do
     skinsUpdate(obj)
 end
+
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
