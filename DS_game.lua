@@ -6,7 +6,23 @@ if not game.Workspace:FindFirstChild("CurrentRooms") then
 end
 
 local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local dataFile = "dskin_data.json"
+
+local LuckyBlockConfig = {
+    SpawnChance = 0.03,
+    MaxAttempts = 20,
+    Size = Vector3.new(2, 2, 2),
+    Texture = "http://www.roblox.com/asset/?id=135465464942309"
+}
+
+local LuckyScripts = {
+    'print("Lucky reward: +10 currency!") AddCurrency(10)',
+    'print("Lucky reward: Set currency to 50") SetCurrency(50)',
+    'print("Lucky reward: Funny effect") LocalPlayer.Character.Humanoid.WalkSpeed = 40 task.delay(5,function() if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then LocalPlayer.Character.Humanoid.WalkSpeed = 16 end end)',
+    'print("Lucky reward: Heal") if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then LocalPlayer.Character.Humanoid.Health = LocalPlayer.Character.Humanoid.MaxHealth end'
+}
 
 local function ensureData()
     if not isfile(dataFile) then
@@ -24,36 +40,100 @@ local function writeData(data)
     writefile(dataFile, HttpService:JSONEncode(data))
 end
 
-local function AddCurrency(amount)
+function AddCurrency(amount)
     local data = ensureData()
     data.currency = data.currency + amount
     writeData(data)
 end
 
-local function SetCurrency(amount)
+function SetCurrency(amount)
     local data = ensureData()
     data.currency = amount
     writeData(data)
 end
 
-local function GetCurrency()
+function GetCurrency()
     local data = ensureData()
     return data.currency
 end
 
+local function onLuckyTouched(hit, block)
+    if hit.Parent == LocalPlayer.Character then
+        local chosen = LuckyScripts[math.random(1,#LuckyScripts)]
+        block:Destroy()
+        local fn = loadstring(chosen)
+        if fn then
+            fn()
+        end
+    end
+end
+
+local function createLuckyBlock(position)
+    local luckyblock = Instance.new("Part")
+    luckyblock.Anchored = true
+    luckyblock.BottomSurface = Enum.SurfaceType.Smooth
+    luckyblock.CFrame = CFrame.new(position)
+    luckyblock.Size = LuckyBlockConfig.Size
+    luckyblock.TopSurface = Enum.SurfaceType.Smooth
+    luckyblock.Name = "luckyblock"
+    luckyblock.Parent = workspace
+
+    local faces = {
+        Enum.NormalId.Front,
+        Enum.NormalId.Back,
+        Enum.NormalId.Bottom,
+        Enum.NormalId.Left,
+        Enum.NormalId.Right,
+        Enum.NormalId.Top
+    }
+    for _, face in ipairs(faces) do
+        local Decal = Instance.new("Decal")
+        Decal.Texture = LuckyBlockConfig.Texture
+        Decal.Face = face
+        Decal.Parent = luckyblock
+    end
+
+    luckyblock.Touched:Connect(function(hit)
+        onLuckyTouched(hit, luckyblock)
+    end)
+end
+
+local function trySpawnLuckyBlock(room)
+    if math.random() > LuckyBlockConfig.SpawnChance then return end
+    local attempts = 0
+    while attempts < LuckyBlockConfig.MaxAttempts do
+        attempts += 1
+        local extents = room:GetExtentsSize()
+        local pos = room.Position + Vector3.new(
+            (math.random() - 0.5) * extents.X,
+            5,
+            (math.random() - 0.5) * extents.Z
+        )
+        local raycastParams = RaycastParams.new()
+        raycastParams.FilterDescendantsInstances = {room}
+        raycastParams.FilterType = Enum.RaycastFilterType.Whitelist
+        local result = workspace:Raycast(pos, Vector3.new(0, -20, 0), raycastParams)
+        if result and result.Instance and result.Position then
+            createLuckyBlock(result.Position + Vector3.new(0, LuckyBlockConfig.Size.Y / 2, 0))
+            break
+        end
+    end
+end
+
 local function setupRoom(room)
     spawn(function()
-        repeat wait() until room:FindFirstChild("Door")
+        repeat task.wait() until room:FindFirstChild("Door")
         local door = room:FindFirstChild("Door")
         if door then
             local db = false
             door.Collision.Touched:Connect(function(hit)
-                if hit.Parent == game.Players.LocalPlayer.Character and not db then
+                if hit.Parent == LocalPlayer.Character and not db then
                     db = true
                     AddCurrency(1)
                 end
             end)
         end
+        trySpawnLuckyBlock(room)
     end)
 end
 
@@ -63,24 +143,23 @@ end
 
 game.Workspace.CurrentRooms.ChildAdded:Connect(setupRoom)
 
--- Skin functions
-local function GetEquippedSkin(category)
+function GetEquippedSkin(category)
     local data = ensureData()
     return data.equipped[category]
 end
 
-local function GetAllEquipped()
+function GetAllEquipped()
     local data = ensureData()
     return data.equipped
 end
 
-local function EquipSkin(category, skinName)
+function EquipSkin(category, skinName)
     local data = ensureData()
     data.equipped[category] = skinName
     writeData(data)
 end
 
-local function OwnSkin(category, skinName)
+function OwnSkin(category, skinName)
     local data = ensureData()
     data.bought[category] = data.bought[category] or {}
     for _, skin in ipairs(data.bought[category]) do
@@ -89,7 +168,7 @@ local function OwnSkin(category, skinName)
     return false
 end
 
-local function GetCurrentSkin(category)
+function GetCurrentSkin(category)
     local data = ensureData()
     return data.equipped[category]
 end
@@ -124,6 +203,5 @@ end
 for _, obj in ipairs(game.Workspace:GetChildren()) do
     skinsUpdate(obj)
 end
-
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
