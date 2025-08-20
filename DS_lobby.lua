@@ -1,3 +1,5 @@
+task.wait(10)
+
 spawn(function()
     
 local HttpService = game:GetService("HttpService")
@@ -336,4 +338,5 @@ for i, char in ipairs(characters) do
         tabFrame.Visible = true
         updateTab()
     end)
+
 end
