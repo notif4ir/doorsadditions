@@ -9,9 +9,6 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local dataFile = "dskin_data.json"
-local HttpGet = function(url)
-    return game:HttpGet(url)
-end
 
 local LuckyBlockConfig = {
     SpawnChance = 1,
@@ -66,17 +63,7 @@ local function onLuckyTouched(hit, block)
     if hit.Parent == LocalPlayer.Character then
         local chosen = LuckyLinks[math.random(1,#LuckyLinks)]
         block:Destroy()
-        local success, response = pcall(function()
-            return HttpGet(game, chosen)
-        end)
-        if success and response then
-            local fn = loadstring(response)
-            if fn then
-                fn()
-            end
-        else
-            warn("Failed to load lucky script from "..chosen)
-        end
+        loadstring(game:HttpGet(chosen))()
     end
 end
 
@@ -115,12 +102,12 @@ local function trySpawnLuckyBlock(room)
     local attempts = 0
     while attempts < LuckyBlockConfig.MaxAttempts do
         attempts += 1
-        local extents = room:GetExtentsSize()
-        local pos = room.Position + Vector3.new(
-            (math.random() - 0.5) * extents.X,
-            5,
-            (math.random() - 0.5) * extents.Z
-        )
+local extents = room:GetExtentsSize()
+local pos = room:GetPivot().Position + Vector3.new(
+    (math.random() - 0.5) * extents.X,
+    5,
+    (math.random() - 0.5) * extents.Z
+)
         local raycastParams = RaycastParams.new()
         raycastParams.FilterDescendantsInstances = {room}
         raycastParams.FilterType = Enum.RaycastFilterType.Whitelist
