@@ -9,7 +9,9 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local dataFile = "dskin_data.json"
-local HttpGet = game:HttpGet
+local HttpGet = function(url)
+    return game:HttpGet(url)
+end
 
 local LuckyBlockConfig = {
     SpawnChance = 1,
@@ -215,4 +217,3 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
-
