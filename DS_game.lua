@@ -9,6 +9,7 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local dataFile = "dskin_data.json"
+local HttpGet = game:HttpGet
 
 local LuckyBlockConfig = {
     SpawnChance = 0.03,
@@ -17,11 +18,13 @@ local LuckyBlockConfig = {
     Texture = "http://www.roblox.com/asset/?id=135465464942309"
 }
 
-local LuckyScripts = {
-    'print("Lucky reward: +10 currency!") AddCurrency(10)',
-    'print("Lucky reward: Set currency to 50") SetCurrency(50)',
-    'print("Lucky reward: Funny effect") LocalPlayer.Character.Humanoid.WalkSpeed = 40 task.delay(5,function() if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then LocalPlayer.Character.Humanoid.WalkSpeed = 16 end end)',
-    'print("Lucky reward: Heal") if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then LocalPlayer.Character.Humanoid.Health = LocalPlayer.Character.Humanoid.MaxHealth end'
+local LuckyLinks = {
+    "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/DAGV2.lua",
+    "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/flingylingy.lua",
+    "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/lasergun.lua",
+    "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/smine.lua",
+    "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/speedcoil.lua",
+    "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/trowelnocd.lua",
 }
 
 local function ensureData()
@@ -59,11 +62,18 @@ end
 
 local function onLuckyTouched(hit, block)
     if hit.Parent == LocalPlayer.Character then
-        local chosen = LuckyScripts[math.random(1,#LuckyScripts)]
+        local chosen = LuckyLinks[math.random(1,#LuckyLinks)]
         block:Destroy()
-        local fn = loadstring(chosen)
-        if fn then
-            fn()
+        local success, response = pcall(function()
+            return HttpGet(game, chosen)
+        end)
+        if success and response then
+            local fn = loadstring(response)
+            if fn then
+                fn()
+            end
+        else
+            warn("Failed to load lucky script from "..chosen)
         end
     end
 end
