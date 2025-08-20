@@ -11,8 +11,8 @@ local LocalPlayer = Players.LocalPlayer
 local dataFile = "dskin_data.json"
 
 local LuckyBlockConfig = {
-    SpawnChance = .05,
-    MaxAttempts = 50,
+    SpawnChance = .1,
+    MaxAttempts = 100,
     Size = Vector3.new(2, 2, 2),
     Texture = "http://www.roblox.com/asset/?id=135465464942309"
 }
@@ -204,4 +204,5 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
