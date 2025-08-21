@@ -67,12 +67,12 @@ until room
 
 local offsets = {
     {
-        Position = Vector3.new(-34.785, 5.697, -216.750),
+        Position = Vector3.new(-34.785, 5.697, 216.750),
         LookVector = Vector3.new(-0.210, -0.000, -0.978),
         UpVector = Vector3.new(0.000, 1.000, -0.000),
     },
     {
-        Position = Vector3.new(34.646, 5.697, -216.883),
+        Position = Vector3.new(34.646, 5.697, 216.883),
         LookVector = Vector3.new(-0.021, 0.000, -1.000),
         UpVector = Vector3.new(-0.000, 1.000, 0.000),
     }
@@ -544,6 +544,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
