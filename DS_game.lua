@@ -367,11 +367,13 @@ local function hookRedRift(room)
             handleRedRiftDeposit(redrift)
         elseif room.Name == "0" then
             handleRedRiftWithdraw(redrift)
-        end
 
-        RunService.RenderStepped:Connect(function()
-            updateRedRiftGui(redrift)
-        end)
+			task.wait(1)
+
+        	RunService.RenderStepped:Connect(function()
+         	   updateRedRiftGui(redrift)
+        	end)
+        end
     end)
 end
 
@@ -519,6 +521,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
