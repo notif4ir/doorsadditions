@@ -319,7 +319,7 @@ local function handleRedRiftDeposit(redrift)
         local humanoid = char:FindFirstChildOfClass("Humanoid")
         if not humanoid then return end
 			print("der is human oid")
-        local tool = humanoid:FindFirstChildOfClass("Tool")
+        local tool = char:FindFirstChildOfClass("Tool")
         if tool then
 				print(" the player has a tool i guess idk bro")
             tool:Destroy()
@@ -548,6 +548,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
