@@ -350,6 +350,4 @@ for i, char in ipairs(characters) do
         tabFrame.Visible = true
         updateTab()
     end)
-
 end
-
