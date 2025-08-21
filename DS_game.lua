@@ -51,6 +51,8 @@ for _, particle in ipairs(rifttemplate:GetDescendants()) do
 	end
 end
 
+		print("the redrift has spawned in room 0")
+
 redrift = rifttemplate:Clone()
 
 local RedRift = redrift
@@ -82,6 +84,8 @@ local roomPivot = room:GetPivot()
 local finalCFrame = roomPivot:ToWorldSpace(offsetCFrame)
 
 RedRift:PivotTo(finalCFrame)
+
+		print("the redrift has spawned in room 50 in a random place i guess idk bro")
 end)
 
 local HttpService = game:GetService("HttpService")
@@ -487,3 +491,4 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
