@@ -237,7 +237,21 @@ game.Workspace.CurrentRooms.ChildAdded:Connect(setupRoom)
 
 local redriftFile = "DSKINS_REDRIFTDATA.json"
 
+local RunService = game:GetService("RunService")
+
+local function setRedRiftActive(redrift, active)
+    if not redrift then return end
+    for _, p in ipairs(redrift:GetDescendants()) do
+        if p:IsA("ParticleEmitter") then
+            p.Enabled = active
+        elseif p:IsA("ProximityPrompt") then
+            p.Enabled = active
+        end
+    end
+end
+
 local function updateRedRiftGui(redrift)
+    if not redrift then return end
     local gui = redrift:FindFirstChild("StarCenter"):FindFirstChildOfClass("BillboardGui")
     if not gui then return end
     local label = gui:FindFirstChildOfClass("ImageLabel")
@@ -247,10 +261,13 @@ local function updateRedRiftGui(redrift)
         local data = HttpService:JSONDecode(readfile(redriftFile))
         if data and data.texture and data.texture ~= "" then
             label.Image = data.texture
+            setRedRiftActive(redrift, true)
             return
         end
     end
+
     label.Image = ""
+    setRedRiftActive(redrift, false)
 end
 
 local function ensureRedRiftData()
@@ -301,12 +318,12 @@ local function handleRedRiftWithdraw(redrift)
     prompt.Triggered:Connect(function(player)
         if player ~= LocalPlayer then return end
         if not isfile(redriftFile) then
-            redrift:Destroy()
+            updateRedRiftGui(redrift)
             return
         end
         local data = HttpService:JSONDecode(readfile(redriftFile))
         if not data or not data.sourceLink then
-            redrift:Destroy()
+            updateRedRiftGui(redrift)
             return
         end
 
@@ -328,23 +345,20 @@ local function handleRedRiftWithdraw(redrift)
 end
 
 local function hookRedRift(room)
-    if room.Name == "50" then
-        spawn(function()
-            local redrift = room:WaitForChild("RedRift", 60)
-            if redrift then
-                handleRedRiftDeposit(redrift)
-                updateRedRiftGui(redrift)
-            end
+    spawn(function()
+        local redrift = room:WaitForChild("RedRift", 60)
+        if not redrift then return end
+
+        if room.Name == "50" then
+            handleRedRiftDeposit(redrift)
+        elseif room.Name == "0" then
+            handleRedRiftWithdraw(redrift)
+        end
+
+        RunService.RenderStepped:Connect(function()
+            updateRedRiftGui(redrift)
         end)
-    elseif room.Name == "0" then
-        spawn(function()
-            local redrift = room:WaitForChild("RedRift", 60)
-            if redrift then
-                handleRedRiftWithdraw(redrift)
-                updateRedRiftGui(redrift)
-            end
-        end)
-    end
+    end)
 end
 
 for _, v in ipairs(game.Workspace.CurrentRooms:GetChildren()) do
@@ -491,4 +505,5 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
