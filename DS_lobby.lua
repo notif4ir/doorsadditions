@@ -187,7 +187,9 @@ local skins = {
         {Name="Minecraft", Image="rbxassetid://10896793201", Cost=25},
         {Name="Plushie", Image="rbxassetid://12978732658", Cost=100},
         {Name="Tuff", Image="rbxassetid://87088896638971", Cost=100},
-        {Name="Stage 2", Image="rbxassetid://11232581784", Cost=100}
+        {Name="Stage 2", Image="rbxassetid://96123320328002", Cost=100},
+		{Name="Blitz", Image="rbxassetid://126371141966093", Cost=75},
+		{Name="veri sad", Image="rbxassetid://14229414086", Cost=50}
     },
     Ambush = {
 		{Name="Old", Image="rbxassetid://11387541299", Cost=50},
@@ -352,6 +354,7 @@ for i, char in ipairs(characters) do
         updateTab()
     end)
 end
+
 
 
 
