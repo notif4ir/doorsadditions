@@ -419,30 +419,54 @@ local rushSkins = {
         Color = ColorSequence.new{
             ColorSequenceKeypoint.new(0, Color3.fromRGB(10, 10, 80)),
             ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 50))
-        }
+        },
+        ApplyToMainParticle = true
     },
-    ["but bad"] = {Texture = 11027732448, Color = nil},
-    ["Screaming"] = {Texture = 11709617815, Color = nil},
-    ["Minecraft"] = {Texture = 10896793201, Color = nil},
-    ["Plushie"] = {Texture = 12978732658, Color = nil},
-    ["Tuff"] = {Texture = 87088896638971, Color = nil},
-    ["Stage 2"] = {Texture = 11232581784, Color = nil},
+    ["but bad"] = {Texture = 11027732448, Color = nil, ApplyToMainParticle = true},
+    ["Screaming"] = {Texture = 11709617815, Color = nil, ApplyToMainParticle = true},
+    ["Minecraft"] = {Texture = 10896793201, Color = nil, ApplyToMainParticle = true},
+    ["Plushie"] = {Texture = 12978732658, Color = nil, ApplyToMainParticle = true},
+    ["Tuff"] = {Texture = 87088896638971, Color = nil, ApplyToMainParticle = true},
+    ["Stage 2"] = {
+        Texture = 96123320328002,
+        Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(128, 128, 128))
+        },
+        ApplyToMainParticle = false
+    },
+	["Blitz"] = {
+    	Texture = 126371141966093,
+    	Color = ColorSequence.new{
+    	    ColorSequenceKeypoint.new(0, Color3.fromRGB(85, 107, 47)),
+    	    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 100, 0))
+    	},
+    	ApplyToMainParticle = false
+	},
+	["veri sad"] = {
+    	Texture = 14229414086,
+    	Color = nil,
+    	ApplyToMainParticle = false
+	},
 }
 
 local function applyRushSkin(model)
     local currentSkin = GetCurrentSkin("Rush")
     if not currentSkin or not rushSkins[currentSkin] then return end
     local skinData = rushSkins[currentSkin]
-    local attachment = model:FindFirstChild("RushNew") and model.RushNew:FindFirstChild("Attachment")
-    if attachment then
-        for _, particle in ipairs(attachment:GetChildren()) do
-            if particle:IsA("ParticleEmitter") then
-                particle.Texture = "rbxassetid://" .. skinData.Texture
+    local rushNew = model:FindFirstChild("RushNew")
+    if not rushNew then return end
+
+    for _, descendant in ipairs(rushNew:GetDescendants()) do
+        if descendant:IsA("ParticleEmitter") then
+            if descendant.Parent.Name == "Attachment" then
+                descendant.Texture = "rbxassetid://" .. skinData.Texture
+            else
                 if skinData.Color then
                     if typeof(skinData.Color) == "ColorSequence" then
-                        particle.Color = skinData.Color
+                        descendant.Color = skinData.Color
                     else
-                        particle.Color = ColorSequence.new(skinData.Color)
+                        descendant.Color = ColorSequence.new(skinData.Color)
                     end
                 end
             end
@@ -521,6 +545,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
