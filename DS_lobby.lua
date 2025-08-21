@@ -195,11 +195,14 @@ local skins = {
     },
     Eyes = {
 	},
+	Screech = {
+		{Name="Old", Image="rbxassetid://11143896610", Cost=100},
+	},
     Seek = {
-		{Name="Old", Image="rbxassetid://126017924797876", Cost=75},
+		{Name="Old", Image="rbxassetid://126017924797876", Cost=100},
 	},
     Figure = {
-		{Name="Noob", Image="rbxassetid://13143745036", Cost=50},
+		{Name="Noob", Image="rbxassetid://13143745036", Cost=75},
 	}
 }
 
@@ -340,3 +343,4 @@ for i, char in ipairs(characters) do
     end)
 
 end
+
