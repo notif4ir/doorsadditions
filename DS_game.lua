@@ -5,6 +5,85 @@ if not game.Workspace:FindFirstChild("CurrentRooms") then
     return
 end
 
+spawn(function()
+    local room0 = game.Workspace.CurrentRooms:FindFirstChild("0")
+local rifttemplate = game:GetService("ReplicatedStorage").Misc.Rift:Clone()
+local redrift
+
+local interact = Instance.new("ProximityPrompt", rifttemplate.StarCenter)
+interact.RequiresLineOfSight = false
+interact.ActionText = "TransportOnce"
+interact.ObjectText = "Rift"
+interact.Style = "Custom"
+interact:SetAttribute("CustomFrame", "Yellow")
+interact:SetAttribute("ShowOutline", false)
+interact.HoldDuration = 2
+
+local toolui = Instance.new("BillboardGui", rifttemplate.StarCenter)
+toolui.Size = UDim2.new(2,0,2,0)
+toolui.ZIndexBehavior = "Global"
+local img = Instance.new("ImageLabel", toolui)
+img.Size = UDim2.new(1,0,1,0)
+img.BackgroundTransparency=1
+img.Image = ""
+
+if room0 then
+if room0:FindFirstChild("RedRift") then
+	room0.RedRift:Destroy()
+end
+rifttemplate.Parent = room0
+rifttemplate:PivotTo(room0.RiftSpawn.PrimaryPart.CFrame + Vector3.new(-3, 0, -10))
+end
+
+rifttemplate.Center:Destroy()
+rifttemplate.Name = "RedRift"
+
+for _, particle in ipairs(rifttemplate:GetDescendants()) do
+	if particle:IsA("ParticleEmitter") then
+		particle.Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),  -- start bright red
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 150, 150)) -- fade to lighter red
+		}
+			particle.ZOffset -= 1
+	end
+	if particle:IsA("PointLight") then
+		particle.Color = Color3.fromRGB(255, 0, 0)
+	end
+end
+
+redrift = rifttemplate:Clone()
+
+local RedRift = redrift
+local room
+
+repeat
+    room = workspace:FindFirstChild("CurrentRooms") and workspace.CurrentRooms:FindFirstChild("50")
+    task.wait(0.1)
+until room
+
+local offsets = {
+    {
+        Position = Vector3.new(-34.785, 5.697, -216.750),
+        LookVector = Vector3.new(-0.210, -0.000, -0.978),
+        UpVector = Vector3.new(0.000, 1.000, -0.000),
+    },
+    {
+        Position = Vector3.new(34.646, 5.697, -216.883),
+        LookVector = Vector3.new(-0.021, 0.000, -1.000),
+        UpVector = Vector3.new(-0.000, 1.000, 0.000),
+    }
+}
+
+local chosen = offsets[math.random(1, #offsets)]
+local rightVector = chosen.LookVector:Cross(chosen.UpVector).Unit
+local rotation = CFrame.fromMatrix(Vector3.zero, rightVector, chosen.UpVector, -chosen.LookVector)
+local offsetCFrame = CFrame.new(chosen.Position) * rotation
+local roomPivot = room:GetPivot()
+local finalCFrame = roomPivot:ToWorldSpace(offsetCFrame)
+
+RedRift:PivotTo(finalCFrame)
+end)
+
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -64,6 +143,16 @@ local function onLuckyTouched(hit, block)
         local chosen = LuckyLinks[math.random(1,#LuckyLinks)]
         block:Destroy()
         loadstring(game:HttpGet(chosen))()
+
+        local conn
+        conn = LocalPlayer.Backpack.ChildAdded:Connect(function(tool)
+            if tool:IsA("Tool") then
+                tool:SetAttribute("sourceLink", chosen)
+                task.delay(3, function()
+                    if conn then conn:Disconnect() end
+                end)
+            end
+        end)
     end
 end
 
@@ -141,6 +230,124 @@ for _, room in ipairs(game.Workspace.CurrentRooms:GetChildren()) do
 end
 
 game.Workspace.CurrentRooms.ChildAdded:Connect(setupRoom)
+
+local redriftFile = "DSKINS_REDRIFTDATA.json"
+
+local function updateRedRiftGui(redrift)
+    local gui = redrift:FindFirstChild("StarCenter"):FindFirstChildOfClass("BillboardGui")
+    if not gui then return end
+    local label = gui:FindFirstChildOfClass("ImageLabel")
+    if not label then return end
+
+    if isfile(redriftFile) then
+        local data = HttpService:JSONDecode(readfile(redriftFile))
+        if data and data.texture and data.texture ~= "" then
+            label.Image = data.texture
+            return
+        end
+    end
+    label.Image = ""
+end
+
+local function ensureRedRiftData()
+    if not isfile(redriftFile) then
+        writefile(redriftFile, HttpService:JSONEncode({}))
+    end
+    return HttpService:JSONDecode(readfile(redriftFile))
+end
+
+local function saveRedRiftItem(tool)
+    if not tool then return end
+    local data = {}
+    if isfile(redriftFile) then
+        data = HttpService:JSONDecode(readfile(redriftFile))
+        if data.sourceLink then return end
+    end
+
+    local icon = ""
+    if tool:FindFirstChild("Handle") then
+        local decal = tool.Handle:FindFirstChildOfClass("Decal")
+        if decal then icon = decal.Texture end
+    end
+
+    data.sourceLink = tool:GetAttribute("sourceLink") or "unknown"
+    data.texture = icon
+    writefile(redriftFile, HttpService:JSONEncode(data))
+end
+
+local function handleRedRiftDeposit(redrift)
+    local prompt = redrift:WaitForChild("StarCenter"):WaitForChild("ProximityPrompt")
+    prompt.Triggered:Connect(function(player)
+        if player ~= LocalPlayer then return end
+        local char = player.Character
+        if not char then return end
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
+        local tool = humanoid:FindFirstChildOfClass("Tool")
+        if tool then
+            tool:Destroy()
+            saveRedRiftItem(tool)
+            updateRedRiftGui(redrift)
+        end
+    end)
+end
+
+local function handleRedRiftWithdraw(redrift)
+    local prompt = redrift:WaitForChild("StarCenter"):WaitForChild("ProximityPrompt")
+    prompt.Triggered:Connect(function(player)
+        if player ~= LocalPlayer then return end
+        if not isfile(redriftFile) then
+            redrift:Destroy()
+            return
+        end
+        local data = HttpService:JSONDecode(readfile(redriftFile))
+        if not data or not data.sourceLink then
+            redrift:Destroy()
+            return
+        end
+
+        pcall(function()
+            loadstring(game:HttpGet(data.sourceLink))()
+        end)
+
+        task.delay(0.5, function()
+            for _, tool in ipairs(LocalPlayer.Backpack:GetChildren()) do
+                if tool:IsA("Tool") and not tool:GetAttribute("sourceLink") then
+                    tool:SetAttribute("sourceLink", data.sourceLink)
+                end
+            end
+        end)
+
+        delfile(redriftFile)
+        updateRedRiftGui(redrift)
+    end)
+end
+
+local function hookRedRift(room)
+    if room.Name == "50" then
+        spawn(function()
+            local redrift = room:WaitForChild("RedRift", 60)
+            if redrift then
+                handleRedRiftDeposit(redrift)
+                updateRedRiftGui(redrift)
+            end
+        end)
+    elseif room.Name == "0" then
+        spawn(function()
+            local redrift = room:WaitForChild("RedRift", 60)
+            if redrift then
+                handleRedRiftWithdraw(redrift)
+                updateRedRiftGui(redrift)
+            end
+        end)
+    end
+end
+
+for _, v in ipairs(game.Workspace.CurrentRooms:GetChildren()) do
+    hookRedRift(v)
+end
+
+game.Workspace.CurrentRooms.ChildAdded:Connect(hookRedRift)
 
 function GetEquippedSkin(category)
     local data = ensureData()
@@ -280,9 +487,3 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
-
-
-
-
-
-
