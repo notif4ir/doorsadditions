@@ -178,7 +178,7 @@ buttonClone.MouseButton1Click:Connect(function()
     bottomButtons.Visible = false
 end)
 
-local characters = {"Rush","Ambush","Eyes","Seek","Figure"}
+local characters = {"Rush","Ambush","Eyes","Screech","Seek","Figure"}
 local skins = {
     Rush = {
         {Name="Old", Image="rbxassetid://11845899956", Cost=50},
@@ -196,7 +196,7 @@ local skins = {
     Eyes = {
 	},
 	Screech = {
-		{Name="Old", Image="rbxassetid://11143896610", Cost=100},
+		{Name="Bald", Image="rbxassetid://11143896610", Cost=100},
 	},
     Seek = {
 		{Name="Old", Image="rbxassetid://126017924797876", Cost=100},
@@ -343,4 +343,5 @@ for i, char in ipairs(characters) do
     end)
 
 end
+
 
