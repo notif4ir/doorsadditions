@@ -312,16 +312,20 @@ end
 local function handleRedRiftDeposit(redrift)
     local prompt = redrift:WaitForChild("StarCenter"):WaitForChild("ProximityPrompt")
     prompt.Triggered:Connect(function(player)
-        if player ~= LocalPlayer then return end
-        local char = player.Character
+		print("triggered prompt thing")
+        local char = game.Players.LocalPlayer.Character
         if not char then return end
+		print("char found for the rift thing")
         local humanoid = char:FindFirstChildOfClass("Humanoid")
         if not humanoid then return end
+			print("der is human oid")
         local tool = humanoid:FindFirstChildOfClass("Tool")
         if tool then
+				print(" the player has a tool i guess idk bro")
             tool:Destroy()
             saveRedRiftItem(tool)
             updateRedRiftGuiROOM50(redrift)
+			print("gave the tool to the rift yay")
         end
     end)
 end
@@ -544,6 +548,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
