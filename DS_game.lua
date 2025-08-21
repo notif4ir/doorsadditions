@@ -209,6 +209,33 @@ local function applyRushSkin(model)
     end
 end
 
+local function applyScreechSkin(screech)
+    if GetCurrentSkin("Screech") == "Bald" then
+        screech.Bottom.Slime_Bottom:Destroy()
+        screech.Top.Slime_Top:Destroy()
+        screech.Bottom.Gums_Bottom.Teeth:Destroy()
+        screech.Top.Gums_Top.Teeth:Destroy()
+    
+        local skinColor = Color3.fromRGB(198, 177, 178)
+    
+        for _, tentacle in pairs(screech:GetChildren()) do
+            if tentacle.Name:match("Tentacle") then
+                for _, part in pairs(tentacle:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Color = skinColor
+                    end
+                end
+            end
+        end
+    end
+end
+
+game.Workspace.CurrentCamera.ChildAdded:Connect(function(child)
+    if child.Name == "Screech" then
+        applyScreechSkin(child)
+    end
+end)
+
 local function skinsUpdate(obj)
     if obj.Name == "RushMoving" then
         spawn(function()
@@ -222,6 +249,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
