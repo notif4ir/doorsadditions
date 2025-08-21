@@ -242,8 +242,10 @@ local redriftFile = "DSKINS_REDRIFTDATA.json"
 
 local RunService = game:GetService("RunService")
 
+local destroyed = false
 local function updateRedRiftGui(redrift)
-    if not redrift or not redrift.Parent then return end
+	if destroyed == true then return end
+    if redrift == nil or not redrift or not redrift.Parent then return end
     local starCenter = redrift:FindFirstChild("StarCenter")
     if not starCenter then return end
     local gui = starCenter:FindFirstChildOfClass("BillboardGui")
@@ -261,6 +263,7 @@ local function updateRedRiftGui(redrift)
 
     if redrift and redrift.Parent then
         redrift:Destroy()
+		destroyed = true
     end
 end
 
@@ -516,5 +519,6 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
