@@ -218,6 +218,15 @@ if not isfile(dataFile) then
     writefile(dataFile, HttpService:JSONEncode(dskinData))
 else
     dskinData = HttpService:JSONDecode(readfile(dataFile))
+    for _, char in ipairs(characters) do
+        if not dskinData.bought[char] then
+            dskinData.bought[char] = {}
+        end
+        if not dskinData.equipped[char] then
+            dskinData.equipped[char] = "None"
+        end
+    end
+    saveData()
 end
 
 local function saveData()
@@ -343,5 +352,4 @@ for i, char in ipairs(characters) do
     end)
 
 end
-
 
