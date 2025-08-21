@@ -209,6 +209,11 @@ local skins = {
 local dataFile = "dskin_data.json"
 
 local dskinData
+
+local function saveData()
+    writefile(dataFile, HttpService:JSONEncode(dskinData))
+end
+
 if not isfile(dataFile) then
     dskinData = {currency=0, bought={}, equipped={}}
     for _, char in ipairs(characters) do
@@ -227,10 +232,6 @@ else
         end
     end
     saveData()
-end
-
-function saveData()
-    writefile(dataFile, HttpService:JSONEncode(dskinData))
 end
 
 local tabBar = Instance.new("ScrollingFrame")
@@ -351,5 +352,6 @@ for i, char in ipairs(characters) do
         updateTab()
     end)
 end
+
 
 
