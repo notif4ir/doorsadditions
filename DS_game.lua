@@ -211,6 +211,7 @@ end
 
 local function applyScreechSkin(screech)
     if GetCurrentSkin("Screech") == "Bald" then
+        task.wait(0.25)
         screech.Bottom.Slime_Bottom:Destroy()
         screech.Top.Slime_Top:Destroy()
         screech.Bottom.Gums_Bottom.Teeth:Destroy()
@@ -236,6 +237,36 @@ game.Workspace.CurrentCamera.ChildAdded:Connect(function(child)
     end
 end)
 
+local function seekSkinSetup(seek)
+    if GetCurrentSkin("Seek") == "Old" then
+        task.wait(.5)
+    
+        if seek:FindFirstChild("Figure") then
+            seek.Figure.Transparency = 0
+    
+            for _, child in pairs(seek.SeekRig:GetDescendants()) do
+                if child:IsA("BasePart") then
+                    child.Transparency = 1
+                elseif child:IsA("Decal") or child:IsA("Texture") then
+                    child:Destroy()
+                end
+            end
+    
+            for _, particle in pairs(seek.Figure:GetDescendants()) do
+                if particle:IsA("ParticleEmitter") then
+                    particle.Enabled = true
+                end
+            end
+        end
+    end
+end
+
+game.Workspace.ChildAdded:Connect(function(child)
+    if child.Name == "SeekMovingNewClone" then
+        seekSkinSetup(child)
+    end
+end)
+
 local function skinsUpdate(obj)
     if obj.Name == "RushMoving" then
         spawn(function()
@@ -249,6 +280,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
