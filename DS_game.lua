@@ -84,8 +84,9 @@ local roomPivot = room:GetPivot()
 local finalCFrame = roomPivot:ToWorldSpace(offsetCFrame)
 
 RedRift:PivotTo(finalCFrame)
+RedRift.Parent=game.Workspace.CurrentRooms["50"]
 
-		print("the redrift has spawned in room 50 in a random place i guess idk bro")
+print("the redrift has spawned in room 50 in a random place i guess idk bro")
 end)
 
 local HttpService = game:GetService("HttpService")
@@ -239,17 +240,6 @@ local redriftFile = "DSKINS_REDRIFTDATA.json"
 
 local RunService = game:GetService("RunService")
 
-local function setRedRiftActive(redrift, active)
-    if not redrift then return end
-    for _, p in ipairs(redrift:GetDescendants()) do
-        if p:IsA("ParticleEmitter") then
-            p.Enabled = active
-        elseif p:IsA("ProximityPrompt") then
-            p.Enabled = active
-        end
-    end
-end
-
 local function updateRedRiftGui(redrift)
     if not redrift then return end
     local gui = redrift:FindFirstChild("StarCenter"):FindFirstChildOfClass("BillboardGui")
@@ -261,13 +251,11 @@ local function updateRedRiftGui(redrift)
         local data = HttpService:JSONDecode(readfile(redriftFile))
         if data and data.texture and data.texture ~= "" then
             label.Image = data.texture
-            setRedRiftActive(redrift, true)
             return
         end
     end
 
-    label.Image = ""
-    setRedRiftActive(redrift, false)
+    redrift:Destroy()
 end
 
 local function ensureRedRiftData()
@@ -505,5 +493,3 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
-
-
