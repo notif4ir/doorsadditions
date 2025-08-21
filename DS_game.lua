@@ -11,7 +11,7 @@ local LocalPlayer = Players.LocalPlayer
 local dataFile = "dskin_data.json"
 
 local LuckyBlockConfig = {
-    SpawnChance = .075,
+    SpawnChance = .04,
     MaxAttempts = 100,
     Size = Vector3.new(2, 2, 2),
     Texture = "http://www.roblox.com/asset/?id=135465464942309"
@@ -173,21 +173,39 @@ function GetCurrentSkin(category)
 end
 
 local rushSkins = {
-    ["Old"] = 11845899956,
-    ["but bad"] = 11027732448,
-    ["Screaming"] = 11709617815,
-    ["Minecraft"] = 10896793201,
-    ["Plushie"] = 12978732658,
-    ["Tuff"] = 87088896638971,
-    ["Stage 2"] = 11232581784,
+    ["Old"] = {
+        Texture = 11845899956,
+        Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(10, 10, 80)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 50))
+        }
+    },
+    ["but bad"] = {Texture = 11027732448, Color = nil},
+    ["Screaming"] = {Texture = 11709617815, Color = nil},
+    ["Minecraft"] = {Texture = 10896793201, Color = nil},
+    ["Plushie"] = {Texture = 12978732658, Color = nil},
+    ["Tuff"] = {Texture = 87088896638971, Color = nil},
+    ["Stage 2"] = {Texture = 11232581784, Color = nil},
 }
 
 local function applyRushSkin(model)
     local currentSkin = GetCurrentSkin("Rush")
     if not currentSkin or not rushSkins[currentSkin] then return end
+    local skinData = rushSkins[currentSkin]
     local attachment = model:FindFirstChild("RushNew") and model.RushNew:FindFirstChild("Attachment")
-    if attachment and attachment:FindFirstChild("ParticleEmitter") then
-        attachment.ParticleEmitter.Texture = "rbxassetid://" .. rushSkins[currentSkin]
+    if attachment then
+        for _, particle in ipairs(attachment:GetChildren()) do
+            if particle:IsA("ParticleEmitter") then
+                particle.Texture = "rbxassetid://" .. skinData.Texture
+                if skinData.Color then
+                    if typeof(skinData.Color) == "ColorSequence" then
+                        particle.Color = skinData.Color
+                    else
+                        particle.Color = ColorSequence.new(skinData.Color)
+                    end
+                end
+            end
+        end
     end
 end
 
@@ -204,6 +222,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
