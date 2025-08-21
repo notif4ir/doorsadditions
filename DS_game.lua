@@ -79,16 +79,15 @@ local offsets = {
 }
 
 local chosen = offsets[math.random(1, #offsets)]
-local rightVector = chosen.LookVector:Cross(chosen.UpVector).Unit
-local rotation = CFrame.fromMatrix(Vector3.zero, rightVector, chosen.UpVector, -chosen.LookVector)
-local offsetCFrame = CFrame.new(chosen.Position) * rotation
-local roomPivot = room:GetPivot()
-local finalCFrame = roomPivot:ToWorldSpace(offsetCFrame)
+local roomCFrame = room:GetPivot()
+local lookVector = chosen.LookVector
+local upVector = chosen.UpVector
+local rightVector = lookVector:Cross(upVector).Unit
+local localRotation = CFrame.fromMatrix(Vector3.zero, rightVector, upVector, -lookVector)
+local finalCFrame = roomCFrame * CFrame.new(chosen.Position) * localRotation
 
 RedRift:PivotTo(finalCFrame)
-RedRift.Parent=game.Workspace.CurrentRooms["50"]
-
-print("the redrift has spawned in room 50 in a random place i guess idk bro")
+RedRift.Parent = room
 end)
 
 local HttpService = game:GetService("HttpService")
@@ -545,6 +544,7 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
 
 
 
