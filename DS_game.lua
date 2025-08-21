@@ -63,6 +63,8 @@ repeat
     task.wait(0.1)
 until room
 
+		print("found room 50, setting up the rift stuff")
+
 local offsets = {
     {
         Position = Vector3.new(-34.785, 5.697, -216.750),
@@ -258,6 +260,23 @@ local function updateRedRiftGui(redrift)
     redrift:Destroy()
 end
 
+local function updateRedRiftGuiROOM50(redrift)
+    if not redrift then return end
+    local gui = redrift:FindFirstChild("StarCenter"):FindFirstChildOfClass("BillboardGui")
+    if not gui then return end
+    local label = gui:FindFirstChildOfClass("ImageLabel")
+    if not label then return end
+
+    if isfile(redriftFile) then
+        local data = HttpService:JSONDecode(readfile(redriftFile))
+        if data and data.texture and data.texture ~= "" then
+            label.Image = data.texture
+		else
+			label.Image = ""
+        end
+    end
+end
+
 local function ensureRedRiftData()
     if not isfile(redriftFile) then
         writefile(redriftFile, HttpService:JSONEncode({}))
@@ -296,7 +315,7 @@ local function handleRedRiftDeposit(redrift)
         if tool then
             tool:Destroy()
             saveRedRiftItem(tool)
-            updateRedRiftGui(redrift)
+            updateRedRiftGuiROOM50(redrift)
         end
     end)
 end
@@ -493,3 +512,4 @@ for _, obj in ipairs(game.Workspace:GetChildren()) do
 end
 
 game.Workspace.ChildAdded:Connect(skinsUpdate)
+
