@@ -206,6 +206,10 @@ local skins = {
 	}
 }
 
+local function saveData()
+    writefile(dataFile, HttpService:JSONEncode(dskinData))
+end
+
 local dataFile = "dskin_data.json"
 
 local dskinData
@@ -227,10 +231,6 @@ else
         end
     end
     saveData()
-end
-
-local function saveData()
-    writefile(dataFile, HttpService:JSONEncode(dskinData))
 end
 
 local tabBar = Instance.new("ScrollingFrame")
@@ -351,3 +351,4 @@ for i, char in ipairs(characters) do
         updateTab()
     end)
 end
+
