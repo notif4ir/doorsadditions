@@ -473,13 +473,14 @@ local function rushSkin(entity)
 				if descendant.Name == "BlackTrail" then
 					descendant.Texture = "rbxassetid://124421145883538"
 					descendant.Rate = 100
-					descendant.Lifetime = 1
+					descendant.Lifetime = NumberRange(1)
+					descendant.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255))
 					descendant.Speed = 15
 				end
 			end
 			if descendant:IsA("Sound") then
 				descendant.SoundId = "rbxassetid://125495161781334"
-				descendant.PlaybackSpeed*=1.64
+				descendant.PlaybackSpeed*=4
 			end
 		end
 	elseif skin == "Stage 2" then
@@ -578,13 +579,17 @@ local function ambushSkin(entity)
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
 					descendant.Texture = "rbxassetid://133716056050083"
+					descendant.LockedToPart = false
 				end
 			end
 			if descendant:IsA("PointLight") then
 				descendant.Brightness = 12212121
 				descendant.Range = 60
-				descendant.Color = Color3.fromRGB(55, 255, 0)
+				descendant.Color = Color3.fromRGB(40, 118, 52)
 			end	
+			if descendant:IsA("Sound") then
+				descendant.PlaybackSpeed*=math.random(4,10)/10
+			end
 		end
 	elseif skin == "Neko Ambush" then
 		for _, descendant in ipairs(container:GetDescendants()) do
