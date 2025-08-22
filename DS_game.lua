@@ -260,7 +260,7 @@ local function updateRedRiftGui(redrift)
 
 	if isfile(redriftFile) then
 		local data = HttpService:JSONDecode(readfile(redriftFile))
-		if data and data.texture and data.texture ~= "" then
+		if data and data.texture then
 			label.Image = data.texture
 			return
 		end
@@ -281,7 +281,7 @@ local function updateRedRiftGuiROOM50(redrift)
 
 	if isfile(redriftFile) then
 		local data = HttpService:JSONDecode(readfile(redriftFile))
-		if data and data.texture and data.texture ~= "" then
+		if data and data.texture then
 			label.Image = data.texture
 		else
 			label.Image = ""
@@ -337,7 +337,6 @@ end
 local function handleRedRiftWithdraw(redrift)
 	local prompt = redrift:WaitForChild("StarCenter"):WaitForChild("ProximityPrompt")
 	prompt.Triggered:Connect(function(player)
-		if player ~= LocalPlayer then return end
 		if not isfile(redriftFile) then
 			updateRedRiftGui(redrift)
 			return
@@ -351,17 +350,26 @@ local function handleRedRiftWithdraw(redrift)
 		pcall(function()
 			loadstring(game:HttpGet(data.sourceLink))()
 		end)
+		
+		
+		local db = false
+		local t = os.time()
+		local conn
+		conn = LocalPlayer.Backpack.ChildAdded:Connect(function(tool)
+			if os.time() - t >= 3 then
+				conn:Disconnect()
+				return
+			end
 
-		task.delay(0.5, function()
-			for _, tool in ipairs(LocalPlayer.Backpack:GetChildren()) do
-				if tool:IsA("Tool") and not tool:GetAttribute("sourceLink") then
-					tool:SetAttribute("sourceLink", data.sourceLink)
-				end
+			if tool:IsA("Tool") and not db then
+				tool:SetAttribute("sourceLink", data.sourceLink)
+				db = true
+				conn:Disconnect()
+				
+				delfile(redriftFile)
+				updateRedRiftGui(redrift)
 			end
 		end)
-
-		delfile(redriftFile)
-		updateRedRiftGui(redrift)
 	end)
 end
 
