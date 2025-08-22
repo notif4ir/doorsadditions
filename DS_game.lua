@@ -473,7 +473,7 @@ local function rushSkin(entity)
 				if descendant.Name == "BlackTrail" then
 					descendant.Texture = "rbxassetid://124421145883538"
 					descendant.Rate = 100
-					descendant.Lifetime = NumberRange(1)
+					descendant.Lifetime = NumberRange.new(1)
 					descendant.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255))
 					descendant.Speed = 15
 				end
@@ -585,10 +585,21 @@ local function ambushSkin(entity)
 			if descendant:IsA("PointLight") then
 				descendant.Brightness = 12212121
 				descendant.Range = 60
-				descendant.Color = Color3.fromRGB(40, 118, 52)
+				descendant.Color = Color3.fromRGB(17, 212, 115)
 			end	
 			if descendant:IsA("Sound") then
-				descendant.PlaybackSpeed*=math.random(4,10)/10
+				descendant.PlaybackSpeed = descendant.PlaybackSpeed * 0.2
+				descendant.Volume = math.clamp(descendant.Volume * 4, 0, 10)
+				local reverb = Instance.new("ReverbSoundEffect")
+				reverb.DecayTime = 10
+				reverb.WetLevel = 0.8
+				reverb.DryLevel = 0.2
+				reverb.Parent = descendant
+				local echo = Instance.new("EchoSoundEffect")
+				echo.Delay = 0.5
+				echo.WetLevel = 0.7
+				echo.DryLevel = 0.3
+				echo.Parent = descendant
 			end
 		end
 	elseif skin == "Neko Ambush" then
