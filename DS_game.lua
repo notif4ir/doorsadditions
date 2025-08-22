@@ -649,6 +649,167 @@ local function ambushSkin(entity)
 	end
 end
 
+local function eyesSkin(entity)
+	task.wait(0.2)
+	local skin = GetCurrentSkin("Eyes")
+	if not skin then return end
+	local container = entity:FindFirstChild("Core")
+	if not container then return end
+
+	if skin == "Old" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				descendant.Enabled=false
+			end
+			if descendant:IsA("PointLight") then
+				descendant.Brightness = 25
+				descendant.Range = 15
+			end	
+			local eyeParticles = Instance.new("Model")
+			eyeParticles.Name = "eyeParticles"
+
+			local Eyes = Instance.new("ParticleEmitter")
+			Eyes.Brightness = 1.26
+			Eyes.EmissionDirection = Enum.NormalId.Front
+			--[[ Unsupported Type: NumberRange For : Lifetime ]]
+			Eyes.LockedToPart = true
+			Eyes.Rate = 0.2
+			--[[ Unsupported Type: NumberRange For : RotSpeed ]]
+			--[[ Unsupported Type: NumberRange For : Rotation ]]
+			Eyes.Shape = Enum.ParticleEmitterShape.Sphere
+			Eyes.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+			Eyes.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.5, 0), NumberSequenceKeypoint.new(1, 0.5, 0)})
+			Eyes.Speed = NumberRange.new(0)
+			Eyes.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+			Eyes.Texture = "rbxassetid://10183789367"
+			Eyes.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+			Eyes.VelocityInheritance = 0.5
+			Eyes.ZOffset = 2
+			Eyes.Name = "Eyes"
+
+			local Eyes_2 = Instance.new("ParticleEmitter")
+			Eyes_2.Brightness = 1.26
+			Eyes_2.EmissionDirection = Enum.NormalId.Front
+			--[[ Unsupported Type: NumberRange For : Lifetime ]]
+			Eyes_2.LockedToPart = true
+			Eyes_2.Rate = 0.3
+			--[[ Unsupported Type: NumberRange For : RotSpeed ]]
+			--[[ Unsupported Type: NumberRange For : Rotation ]]
+			Eyes_2.Shape = Enum.ParticleEmitterShape.Sphere
+			Eyes_2.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+			Eyes_2.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.5, 0), NumberSequenceKeypoint.new(1, 0.5, 0)})
+			Eyes_2.Speed = NumberRange.new(0)
+			Eyes_2.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+			Eyes_2.Texture = "rbxassetid://10183789209"
+			Eyes_2.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+			Eyes_2.VelocityInheritance = 0.5
+			Eyes_2.ZOffset = 2
+			Eyes_2.Name = "Eyes"
+
+			local Eyes_3 = Instance.new("ParticleEmitter")
+			Eyes_3.Brightness = 1.26
+			Eyes_3.EmissionDirection = Enum.NormalId.Front
+			--[[ Unsupported Type: NumberRange For : Lifetime ]]
+			Eyes_3.LockedToPart = true
+			Eyes_3.Rate = 0.36
+			--[[ Unsupported Type: NumberRange For : RotSpeed ]]
+			--[[ Unsupported Type: NumberRange For : Rotation ]]
+			Eyes_3.Shape = Enum.ParticleEmitterShape.Sphere
+			Eyes_3.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+			Eyes_3.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.5, 0), NumberSequenceKeypoint.new(1, 0.5, 0)})
+			Eyes_3.Speed = NumberRange.new(0)
+			Eyes_3.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+			Eyes_3.Texture = "rbxassetid://10183788505"
+			Eyes_3.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+			Eyes_3.VelocityInheritance = 0.5
+			Eyes_3.ZOffset = 2
+			Eyes_3.Name = "Eyes"
+
+			local Eyes_4 = Instance.new("ParticleEmitter")
+			Eyes_4.Brightness = 1.26
+			Eyes_4.EmissionDirection = Enum.NormalId.Front
+			--[[ Unsupported Type: NumberRange For : Lifetime ]]
+			Eyes_4.LockedToPart = true
+			Eyes_4.Rate = 0.34
+			--[[ Unsupported Type: NumberRange For : RotSpeed ]]
+			--[[ Unsupported Type: NumberRange For : Rotation ]]
+			Eyes_4.Shape = Enum.ParticleEmitterShape.Sphere
+			Eyes_4.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+			Eyes_4.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.35, 0), NumberSequenceKeypoint.new(1, 0.35, 0)})
+			Eyes_4.Speed = NumberRange.new(0)
+			Eyes_4.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+			Eyes_4.Texture = "rbxassetid://10183788915"
+			Eyes_4.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+			Eyes_4.VelocityInheritance = 0.5
+			Eyes_4.ZOffset = 2
+			Eyes_4.Name = "Eyes"
+
+			local Eyes_5 = Instance.new("ParticleEmitter")
+			Eyes_5.Brightness = 1.26
+			Eyes_5.EmissionDirection = Enum.NormalId.Front
+			--[[ Unsupported Type: NumberRange For : Lifetime ]]
+			Eyes_5.LockedToPart = true
+			Eyes_5.Rate = 0.4
+			--[[ Unsupported Type: NumberRange For : RotSpeed ]]
+			--[[ Unsupported Type: NumberRange For : Rotation ]]
+			Eyes_5.Shape = Enum.ParticleEmitterShape.Sphere
+			Eyes_5.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+			Eyes_5.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.7, 0), NumberSequenceKeypoint.new(1, 0.7, 0)})
+			Eyes_5.Speed = NumberRange.new(0)
+			Eyes_5.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+			Eyes_5.Texture = "rbxassetid://10183789076"
+			Eyes_5.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+			Eyes_5.VelocityInheritance = 0.5
+			Eyes_5.ZOffset = 2
+			Eyes_5.Name = "Eyes"
+
+			local Eyes_6 = Instance.new("ParticleEmitter")
+			Eyes_6.Brightness = 1.26
+			Eyes_6.EmissionDirection = Enum.NormalId.Front
+			--[[ Unsupported Type: NumberRange For : Lifetime ]]
+			Eyes_6.LockedToPart = true
+			Eyes_6.Rate = 0.3
+			--[[ Unsupported Type: NumberRange For : RotSpeed ]]
+			--[[ Unsupported Type: NumberRange For : Rotation ]]
+			Eyes_6.Shape = Enum.ParticleEmitterShape.Sphere
+			Eyes_6.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+			Eyes_6.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.98, 0), NumberSequenceKeypoint.new(1, 0.98, 0)})
+			Eyes_6.Speed = NumberRange.new(0)
+			Eyes_6.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+			Eyes_6.Texture = "rbxassetid://10183788505"
+			Eyes_6.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+			Eyes_6.VelocityInheritance = 0.5
+			Eyes_6.ZOffset = 2
+			Eyes_6.Name = "Eyes"
+
+			Eyes.Parent = eyeParticles
+			Eyes_2.Parent = eyeParticles
+			Eyes_3.Parent = eyeParticles
+			Eyes_4.Parent = eyeParticles
+			Eyes_5.Parent = eyeParticles
+			Eyes_6.Parent = eyeParticles
+			
+			for i,particle in eyeParticles:GetChildren() do
+				particle.Parent=container
+			end
+		end
+	elseif skin == "Lookman" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "EyesParticle" then
+					descendant.Texture = "rbxassetid://101244281293434"
+				else
+					descendant.Enabled = false
+				end
+			end
+			if descendant:IsA("PointLight") then
+				descendant.Brightness = 0
+				descendant.Range = 0
+			end	
+		end
+	end
+end
+
 local function seekSkin(entity)
 	if GetCurrentSkin("Seek") == "Old" then
 		task.wait(0.5)
@@ -673,10 +834,6 @@ end
 local function screechSkin(entity)
 	if GetCurrentSkin("Screech") == "Bald" then
 		task.wait(0.25)
-		entity.Bottom.Slime_Bottom:Destroy()
-		entity.Top.Slime_Top:Destroy()
-		entity.Bottom.Gums_Bottom.Teeth:Destroy()
-		entity.Top.Gums_Top.Teeth:Destroy()
 
 		local skinColor = Color3.fromRGB(198, 177, 178)
 		for _, tentacle in pairs(entity:GetChildren()) do
@@ -701,6 +858,8 @@ local function connectEntitySkins(entity)
 		seekSkin(entity)
 	elseif entity.Name == "Screech" then
 		screechSkin(entity)
+	elseif entity.Name == "Eyes" then
+		eyesSkin(entity)
 	end
 end
 
