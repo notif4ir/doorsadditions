@@ -762,9 +762,9 @@ local function eyesSkin(entity)
 			
 			container.Attachment.Angry.Texture = "rbxassetid://4868646391"
 			container.Attachment.Angry.Rate = 10
-			container.Attachment.Angry.Rotation = NumberRange(-5,5)
+			container.Attachment.Angry.Rotation = NumberRange.new(-5,5)
 			container.Attachment.Angry.LightEmission = 1
-			container.Attachment.Angry.Size = NumberSequence.new(6)
+			container.Attachment.Angry.Size = NumberRange.new(6)
 			
 			task.spawn(function()
 				while entity.Parent do
