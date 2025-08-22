@@ -144,31 +144,13 @@ function GetCurrency()
 	return data.currency
 end
 
-local function onLuckyTouched(hit, block)
-	if hit.Parent == LocalPlayer.Character then
-		local chosen = LuckyLinks[math.random(1,#LuckyLinks)]
-		block:Destroy()
-		loadstring(game:HttpGet(chosen))()
-
-		local conn
-		conn = LocalPlayer.Backpack.ChildAdded:Connect(function(tool)
-			if tool:IsA("Tool") then
-				tool:SetAttribute("sourceLink", chosen)
-				task.delay(3, function()
-					if conn then conn:Disconnect() end
-				end)
-			end
-		end)
-	end
-end
-
 local function createLuckyBlock(position)
 	local luckyblock = Instance.new("Part")
-	luckyblock.Anchored = true
+	luckyblock.Anchored = false
 	luckyblock.BottomSurface = Enum.SurfaceType.Smooth
+	luckyblock.TopSurface = Enum.SurfaceType.Smooth
 	luckyblock.CFrame = CFrame.new(position)
 	luckyblock.Size = LuckyBlockConfig.Size
-	luckyblock.TopSurface = Enum.SurfaceType.Smooth
 	luckyblock.Name = "luckyblock"
 	luckyblock.Parent = workspace
 
@@ -181,14 +163,38 @@ local function createLuckyBlock(position)
 		Enum.NormalId.Top
 	}
 	for _, face in ipairs(faces) do
-		local Decal = Instance.new("Decal")
-		Decal.Texture = LuckyBlockConfig.Texture
-		Decal.Face = face
-		Decal.Parent = luckyblock
+		local decal = Instance.new("Decal")
+		decal.Texture = LuckyBlockConfig.Texture
+		decal.Face = face
+		decal.Parent = luckyblock
 	end
 
+	local touchedDebounce = false
+
 	luckyblock.Touched:Connect(function(hit)
-		onLuckyTouched(hit, luckyblock)
+		if touchedDebounce then return end
+		if hit.Parent ~= LocalPlayer.Character then return end
+
+		touchedDebounce = true
+		local chosen = LuckyLinks[math.random(1,#LuckyLinks)]
+		luckyblock:Destroy()
+		loadstring(game:HttpGet(chosen))()
+
+		local db = false
+		local t = os.time()
+		local conn
+		conn = LocalPlayer.Backpack.ChildAdded:Connect(function(tool)
+			if os.time() - t >= 3 then
+				conn:Disconnect()
+				return
+			end
+
+			if tool:IsA("Tool") and not db then
+				tool:SetAttribute("sourceLink", chosen)
+				db = true
+				conn:Disconnect()
+			end
+		end)
 	end)
 end
 
@@ -298,14 +304,12 @@ local function saveRedRiftItem(tool)
 		if data.sourceLink then return end
 	end
 
-	local icon = ""
-	if tool:FindFirstChild("Handle") then
-		local decal = tool.Handle:FindFirstChildOfClass("Decal")
-		if decal then icon = decal.Texture end
-	end
-
 	data.sourceLink = tool:GetAttribute("sourceLink") or "unknown"
-	data.texture = icon
+	if tool.TextureId and tool.TextureId ~= "" then
+		data.texture = tool.TextureId
+	else
+		data.texture = "rbxassetid://10653365009"
+	end	
 	writefile(redriftFile, HttpService:JSONEncode(data))
 end
 
@@ -417,6 +421,7 @@ function GetCurrentSkin(category)
 end
 
 local function rushSkin(entity)
+	task.wait(0.2)
 	local skin = GetCurrentSkin("Rush")
 	if not skin then return end
 	local container = entity:FindFirstChild("RushNew")
@@ -501,6 +506,7 @@ local function rushSkin(entity)
 end
 
 local function ambushSkin(entity)
+	task.wait(0.2)
 	local skin = GetCurrentSkin("Ambush")
 	if not skin then return end
 	local container = entity:FindFirstChild("AmbushNew")
