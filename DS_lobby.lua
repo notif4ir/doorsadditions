@@ -1,5 +1,5 @@
 repeat wait() until game:IsLoaded() == true
-wait(1)
+print("loaded door isloaded i thingk")
 
 spawn(function()
 
@@ -362,4 +362,5 @@ for i, char in ipairs(characters) do
 		updateTab()
 	end)
 end
+
 
