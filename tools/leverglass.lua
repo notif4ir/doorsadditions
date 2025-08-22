@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 local LeverGlass = Instance.new("Tool")
+LeverGlass.TextureId = "rbxassetid://1523548846"
 LeverGlass.Grip = CFrame.new(0, 0, 0.5, 1, 0, 0, 0, -0, 1, 0, -1, -0)
 LeverGlass.GripForward = Vector3.new(0, -1, 0)
 LeverGlass.GripPos = Vector3.new(0, 0, 0.5)
