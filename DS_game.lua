@@ -246,6 +246,9 @@ game.Workspace.CurrentRooms.ChildAdded:Connect(setupRoom)
 local redriftFile = "DSKINS_REDRIFTDATA.json"
 
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local LocalPlayer = Players.LocalPlayer
 
 local destroyed = false
 local function updateRedRiftGui(redrift)
@@ -286,6 +289,8 @@ local function updateRedRiftGuiROOM50(redrift)
 		else
 			label.Image = ""
 		end
+	else
+		label.Image = ""
 	end
 end
 
@@ -301,7 +306,6 @@ local function saveRedRiftItem(tool)
 	local data = {}
 	if isfile(redriftFile) then
 		data = HttpService:JSONDecode(readfile(redriftFile))
-		if data.sourceLink then return end
 	end
 
 	data.sourceLink = tool:GetAttribute("sourceLink") or "unknown"
@@ -316,20 +320,40 @@ end
 local function handleRedRiftDeposit(redrift)
 	local prompt = redrift:WaitForChild("StarCenter"):WaitForChild("ProximityPrompt")
 	prompt.Triggered:Connect(function(player)
-		print("triggered prompt thing")
-		local char = game.Players.LocalPlayer.Character
-		if not char then return end
-		print("char found for the rift thing")
+		if not LocalPlayer.Character then return end
+		local char = LocalPlayer.Character
 		local humanoid = char:FindFirstChildOfClass("Humanoid")
 		if not humanoid then return end
-		print("der is human oid")
+
+		if isfile(redriftFile) then
+			local data = HttpService:JSONDecode(readfile(redriftFile))
+			if data and data.sourceLink then
+				local conn
+				local t = os.time()
+				conn = LocalPlayer.Backpack.ChildAdded:Connect(function(tool)
+					if os.time() - t >= 3 then
+						conn:Disconnect()
+						return
+					end
+					if tool:IsA("Tool") then
+						tool:SetAttribute("sourceLink", data.sourceLink)
+						delfile(redriftFile)
+						updateRedRiftGuiROOM50(redrift)
+						conn:Disconnect()
+					end
+				end)
+				pcall(function()
+					loadstring(game:HttpGet(data.sourceLink))()
+				end)
+				return
+			end
+		end
+
 		local tool = char:FindFirstChildOfClass("Tool")
 		if tool then
-			print(" the player has a tool i guess idk bro")
-			tool:Destroy()
 			saveRedRiftItem(tool)
+			tool:Destroy()
 			updateRedRiftGuiROOM50(redrift)
-			print("gave the tool to the rift yay")
 		end
 	end)
 end
@@ -346,7 +370,7 @@ local function handleRedRiftWithdraw(redrift)
 			updateRedRiftGui(redrift)
 			return
 		end
-		
+
 		local db = false
 		local t = os.time()
 		local conn
@@ -357,15 +381,12 @@ local function handleRedRiftWithdraw(redrift)
 			end
 
 			if tool:IsA("Tool") and not db then
-				print("it gave the tool thing " .. tool.Name .. " so i deleted the rift i think idfk")
 				tool:SetAttribute("sourceLink", data.sourceLink)
 				db = true
 				conn:Disconnect()
 
 				delfile(redriftFile)
 				updateRedRiftGui(redrift)
-				
-				print("updated stuff for the tol eaziu	o")
 			end
 		end)
 
@@ -384,9 +405,7 @@ local function hookRedRift(room)
 			handleRedRiftDeposit(redrift)
 		elseif room.Name == "0" then
 			handleRedRiftWithdraw(redrift)
-
 			task.wait(1)
-
 			RunService.RenderStepped:Connect(function()
 				updateRedRiftGui(redrift)
 			end)
