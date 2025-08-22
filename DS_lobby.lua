@@ -5,6 +5,7 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 repeat wait() until playerGui:FindFirstChild("TopbarUI")
+wait(1)
 
 spawn(function()
 	
@@ -364,3 +365,4 @@ for i, char in ipairs(characters) do
 		updateTab()
 	end)
 end
+
