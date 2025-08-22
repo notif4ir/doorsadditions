@@ -475,7 +475,6 @@ local function rushSkin(entity)
 					descendant.Rate = 100
 					descendant.Lifetime = NumberRange.new(1)
 					descendant.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255))
-					descendant.Speed = 15
 				end
 			end
 			if descendant:IsA("Sound") then
