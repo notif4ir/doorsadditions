@@ -110,6 +110,7 @@ local LuckyLinks = {
 	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/speedcoil.lua",
 	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/trowelnocd.lua",
 	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/bloxycola.lua",
+	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/leverglass.lua",
 }
 
 local function ensureData()
@@ -370,6 +371,10 @@ local function handleRedRiftWithdraw(redrift)
 		if not data or not data.sourceLink then
 			updateRedRiftGui(redrift)
 			return
+		end
+		
+		if data.sourceLink == "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/leverglass.lua" then
+			data.sourceLink = "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/other/riftleverglass.lua"
 		end
 
 		local db = false
