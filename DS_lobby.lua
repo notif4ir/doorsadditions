@@ -1,13 +1,13 @@
 repeat wait() until game:IsLoaded()
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
-repeat wait() until playerGui:FindFirstChild("TopbarUI")
-wait(1)
+wait(3)
+print("LABBY LADED")
 
 spawn(function()
+	
+	local HttpService = game:GetService("HttpService")
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
+	local playerGui = player:WaitForChild("PlayerGui")
 	
 	local topbar = playerGui:WaitForChild("TopbarUI"):WaitForChild("Topbar")
 
@@ -365,4 +365,3 @@ for i, char in ipairs(characters) do
 		updateTab()
 	end)
 end
-
