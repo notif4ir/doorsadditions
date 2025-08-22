@@ -204,8 +204,8 @@ local skins = {
 		{Name="but bad", Image="rbxassetid://11035107437", Cost=25},
 	},
 	Eyes = {
-		{Name="Old", Image="rbxassetid://10183789367", Cost=50},
-		{Name="Lookman", Image="rbxassetid://101244281293434", Cost=50},
+		{Name="Old", Image="rbxassetid://10183789367", Cost=100},
+		{Name="Lookman", Image="rbxassetid://101244281293434", Cost=75},
 	},
 	Screech = {
 		{Name="Bald", Image="rbxassetid://11143896610", Cost=100},
