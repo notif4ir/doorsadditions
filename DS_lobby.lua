@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
-repeat wait() until playerGui:WaitForChild("TopbarUI"):WaitForChild("Topbar"):WaitForChild("Stardust")
+repeat wait() until playerGui:FindFirstChild("TopbarUI")
 
 spawn(function()
 	
