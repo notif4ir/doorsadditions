@@ -89,7 +89,7 @@ RainbowShards.Parent = ParticlesIn
 
 local cooldown = false
 local cooldownTime = 60
-local showTime = 10
+local showTime = 20
 
 local function createHighlight(target, color)
 	local highlight = Instance.new("Highlight")
