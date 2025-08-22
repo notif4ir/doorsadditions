@@ -466,8 +466,20 @@ local function rushSkin(entity)
 		end
 	elseif skin == "Tuff" then
 		for _, descendant in ipairs(container:GetDescendants()) do
-			if descendant:IsA("ParticleEmitter") and descendant.Name == "ParticleEmitter" then
-				descendant.Texture = "rbxassetid://87088896638971"
+			if descendant:IsA("ParticleEmitter") then
+				if descendant.Name == "ParticleEmitter" then
+					descendant.Texture = "rbxassetid://87088896638971"
+				end
+				if descendant.Name == "BlackTrail" then
+					descendant.Texture = "rbxassetid://124421145883538"
+					descendant.Rate = 100
+					descendant.Lifetime = 1
+					descendant.Speed = 15
+				end
+			end
+			if descendant:IsA("Sound") then
+				descendant.SoundId = "rbxassetid://125495161781334"
+				descendant.PlaybackSpeed*=1.64
 			end
 		end
 	elseif skin == "Stage 2" then
