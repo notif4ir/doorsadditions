@@ -109,6 +109,7 @@ local LuckyLinks = {
 	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/smine.lua",
 	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/speedcoil.lua",
 	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/trowelnocd.lua",
+	"https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/bloxycola.lua",
 }
 
 local function ensureData()
