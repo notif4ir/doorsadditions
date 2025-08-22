@@ -1,4 +1,5 @@
-task.wait(10)
+repeat wait() until game:IsLoaded() == true
+wait(1)
 
 spawn(function()
 
@@ -361,3 +362,4 @@ for i, char in ipairs(characters) do
 		updateTab()
 	end)
 end
+
