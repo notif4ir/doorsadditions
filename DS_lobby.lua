@@ -1,13 +1,12 @@
 repeat wait() until game:IsLoaded()
-wait(3)
-print("LABBY LADED")
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+repeat wait() until playerGui:WaitForChild("TopbarUI"):WaitForChild("Topbar"):WaitForChild("Stardust")
 
 spawn(function()
-	
-	local HttpService = game:GetService("HttpService")
-	local Players = game:GetService("Players")
-	local player = Players.LocalPlayer
-	local playerGui = player:WaitForChild("PlayerGui")
 	
 	local topbar = playerGui:WaitForChild("TopbarUI"):WaitForChild("Topbar")
 
