@@ -1,12 +1,13 @@
-repeat wait() until game:IsLoaded() == true
-print("loaded door isloaded i thingk")
+repeat wait() until game:IsLoaded()
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+repeat wait() until playerGui:WaitForChild("TopbarUI"):WaitForChild("Topbar"):WaitForChild("Stardust")
 
 spawn(function()
-
-	local HttpService = game:GetService("HttpService")
-	local Players = game:GetService("Players")
-	local player = Players.LocalPlayer
-	local playerGui = player:WaitForChild("PlayerGui")
+	
 	local topbar = playerGui:WaitForChild("TopbarUI"):WaitForChild("Topbar")
 
 	local dataFile = "dskin_data.json"
@@ -29,7 +30,8 @@ spawn(function()
 	local riftshards = original:Clone()
 	riftshards.Name = "Riftshards"
 	riftshards.Parent = topbar
-
+	
+	riftshards.Visible = true
 	riftshards.Icon.Image = "rbxassetid://14400901694"
 	riftshards.Boosted.Image = "rbxassetid://14400901694"
 	riftshards.Icon.ImageColor3 = Color3.fromRGB(108,79,255)
@@ -37,14 +39,12 @@ spawn(function()
 
 	local textLabel = riftshards
 
-	local originalSize = riftshards.Size
-
 	local function updateUI()
 		local currency = getCurrency()
 		textLabel.Text = tostring(currency)
 		local digitCount = #tostring(currency)
-		local extraWidth = digitCount * 10
-		riftshards.Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset + extraWidth, originalSize.Y.Scale, originalSize.Y.Offset)
+		local extraWidth = (digitCount * 10)
+		riftshards.Size = UDim2.new(original.Size.X.Scale, original.Size.X.Offset + extraWidth, original.Size.Y.Scale, original.Size.Y.Offset)
 	end
 
 	updateUI()
@@ -204,6 +204,8 @@ local skins = {
 		{Name="but bad", Image="rbxassetid://11035107437", Cost=25},
 	},
 	Eyes = {
+		{Name="Old", Image="rbxassetid://10183789367", Cost=50},
+		{Name="Lookman", Image="rbxassetid://101244281293434", Cost=50},
 	},
 	Screech = {
 		{Name="Bald", Image="rbxassetid://11143896610", Cost=100},
@@ -362,5 +364,3 @@ for i, char in ipairs(characters) do
 		updateTab()
 	end)
 end
-
-
