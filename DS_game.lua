@@ -346,11 +346,6 @@ local function handleRedRiftWithdraw(redrift)
 			updateRedRiftGui(redrift)
 			return
 		end
-
-		pcall(function()
-			loadstring(game:HttpGet(data.sourceLink))()
-		end)
-		
 		
 		local db = false
 		local t = os.time()
@@ -362,13 +357,20 @@ local function handleRedRiftWithdraw(redrift)
 			end
 
 			if tool:IsA("Tool") and not db then
+				print("it gave the tool thing " .. tool.Name .. " so i deleted the rift i think idfk")
 				tool:SetAttribute("sourceLink", data.sourceLink)
 				db = true
 				conn:Disconnect()
-				
+
 				delfile(redriftFile)
 				updateRedRiftGui(redrift)
+				
+				print("updated stuff for the tol eaziu	o")
 			end
+		end)
+
+		pcall(function()
+			loadstring(game:HttpGet(data.sourceLink))()
 		end)
 	end)
 end
