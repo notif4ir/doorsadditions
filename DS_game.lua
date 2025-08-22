@@ -509,7 +509,7 @@ local function ambushSkin(entity)
 	task.wait(0.2)
 	local skin = GetCurrentSkin("Ambush")
 	if not skin then return end
-	local container = entity:FindFirstChild("AmbushNew")
+	local container = entity:FindFirstChild("RushNew")
 	if not container then return end
 
 	if skin == "Old" then
