@@ -465,6 +465,20 @@ function GetCurrentSkin(category)
 	return data.equipped[category]
 end
 
+local function updateRushJumpscareImages(texture)
+	local player = game:GetService("Players").LocalPlayer
+	local jumpscare = player.PlayerGui.MainUI:FindFirstChild("Jumpscare")
+	if not jumpscare then return end
+	local jumpscareRush = jumpscare:FindFirstChild("Jumpscare_Rush")
+	if not jumpscareRush then return end
+
+	for _, child in ipairs(jumpscareRush:GetDescendants()) do
+		if child:IsA("ImageLabel") then
+			child.Image = texture
+		end
+	end
+end
+
 local function rushSkin(entity)
 	task.wait(0.1)
 	local skin = GetCurrentSkin("Rush")
@@ -473,10 +487,11 @@ local function rushSkin(entity)
 	if not container then return end
 
 	if skin == "Old" then
+		local mainTexture = "rbxassetid://11845899956"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://11845899956"
+					descendant.Texture = mainTexture
 				else
 					descendant.Texture = "rbxassetid://716847870"
 					descendant.Color = ColorSequence.new{
@@ -486,35 +501,45 @@ local function rushSkin(entity)
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "but bad" then
+		local mainTexture = "rbxassetid://11027732448"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Name == "ParticleEmitter" then
-				descendant.Texture = "rbxassetid://11027732448"
+				descendant.Texture = mainTexture
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Screaming" then
+		local mainTexture = "rbxassetid://11709617815"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Name == "ParticleEmitter" then
-				descendant.Texture = "rbxassetid://11709617815"
+				descendant.Texture = mainTexture
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Minecraft" then
+		local mainTexture = "rbxassetid://10896793201"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Name == "ParticleEmitter" then
-				descendant.Texture = "rbxassetid://10896793201"
+				descendant.Texture = mainTexture
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Plushie" then
+		local mainTexture = "rbxassetid://12978732658"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Name == "ParticleEmitter" then
-				descendant.Texture = "rbxassetid://12978732658"
+				descendant.Texture = mainTexture
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Tuff" then
+		local mainTexture = "rbxassetid://87088896638971"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://87088896638971"
+					descendant.Texture = mainTexture
 				end
 				if descendant.Name == "BlackTrail" then
 					descendant.Texture = "rbxassetid://124421145883538"
@@ -525,14 +550,16 @@ local function rushSkin(entity)
 			end
 			if descendant:IsA("Sound") then
 				descendant.SoundId = "rbxassetid://125495161781334"
-				descendant.PlaybackSpeed*=4
+				descendant.PlaybackSpeed *= 4
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Stage 2" then
+		local mainTexture = "rbxassetid://96123320328002"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://96123320328002"
+					descendant.Texture = mainTexture
 				else
 					descendant.Color = ColorSequence.new{
 						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
@@ -541,11 +568,13 @@ local function rushSkin(entity)
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Stage 3" then
+		local mainTexture = "rbxassetid://71095814517056"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://71095814517056"
+					descendant.Texture = mainTexture
 				else
 					descendant.Texture = "rbxassetid://716847870"
 					descendant.Color = ColorSequence.new{
@@ -555,11 +584,13 @@ local function rushSkin(entity)
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Golden" then
+		local mainTexture = "rbxassetid://10859906277"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://10859906277"
+					descendant.Texture = mainTexture
 				else
 					descendant.Texture = "rbxassetid://716847870"
 					descendant.Color = ColorSequence.new{
@@ -569,32 +600,34 @@ local function rushSkin(entity)
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Nightmare" then
+		local mainTexture = "rbxassetid://12426378358"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://12426378358"
+					descendant.Texture = mainTexture
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "pewpew" then
+		local mainTexture = "rbxassetid://11004381332"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://11004381332"
+					descendant.Texture = mainTexture
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "Blitz" then
-		local useFirst = math.random() < 0.5
+		local mainTexture = math.random() < 0.5 and "rbxassetid://16755073604" or "rbxassetid://16755077927"
+		local useFirst = mainTexture == "rbxassetid://16755073604"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					if useFirst then
-						descendant.Texture = "rbxassetid://16755073604"
-					else
-						descendant.Texture = "rbxassetid://16755077927"
-					end
+					descendant.Texture = mainTexture
 				else
 					descendant.Texture = "rbxassetid://716847870"
 					if useFirst then
@@ -611,11 +644,28 @@ local function rushSkin(entity)
 				end
 			end
 		end
+		updateRushJumpscareImages(mainTexture)
 	elseif skin == "veri sad" then
+		local mainTexture = "rbxassetid://14229414086"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Name == "ParticleEmitter" then
-				descendant.Texture = "rbxassetid://14229414086"
+				descendant.Texture = mainTexture
 			end
+		end
+		updateRushJumpscareImages(mainTexture)
+	end
+end
+
+local function updateAmbushJumpscareImages(texture)
+	local player = game:GetService("Players").LocalPlayer
+	local jumpscare = player.PlayerGui.MainUI:FindFirstChild("Jumpscare")
+	if not jumpscare then return end
+	local jumpscareAmbush = jumpscare:FindFirstChild("Jumpscare_Ambush")
+	if not jumpscareAmbush then return end
+
+	for _, child in ipairs(jumpscareAmbush:GetDescendants()) do
+		if child:IsA("ImageLabel") then
+			child.Image = texture
 		end
 	end
 end
@@ -628,10 +678,11 @@ local function ambushSkin(entity)
 	if not container then return end
 
 	if skin == "Old" then
+		local mainTexture = "rbxassetid://11387541299"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://11387541299"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -640,11 +691,13 @@ local function ambushSkin(entity)
 				descendant.Color = Color3.fromRGB(255, 0, 4)
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Ambus" then
+		local mainTexture = "rbxassetid://13705966898"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://13705966898"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -652,22 +705,26 @@ local function ambushSkin(entity)
 				descendant.Range = 0
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Stage 2" then
+		local mainTexture = "rbxassetid://106229929047970"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://106229929047970"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
 				descendant.Range = 25
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Glitched" then
+		local mainTexture = "rbxassetid://86673868926469"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://86673868926469"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -676,11 +733,13 @@ local function ambushSkin(entity)
 				descendant.Color = Color3.fromRGB(255, 0, 4)
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Stage 3" then
+		local mainTexture = "rbxassetid://133716056050083"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://133716056050083"
+					descendant.Texture = mainTexture
 					descendant.LockedToPart = false
 				end
 			end
@@ -704,11 +763,13 @@ local function ambushSkin(entity)
 				echo.Parent = descendant
 			end
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Neko Ambush" then
+		local mainTexture = "rbxassetid://11208622587"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://11208622587"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -717,19 +778,23 @@ local function ambushSkin(entity)
 				descendant.Color = Color3.fromRGB(247, 0, 255)
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Trolololo" then
+		local mainTexture = "rbxassetid://11879070081"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://11879070081"
+					descendant.Texture = mainTexture
 				end
 			end
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "veri sad" then
+		local mainTexture = "rbxassetid://73075323354438"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://73075323354438"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -737,11 +802,13 @@ local function ambushSkin(entity)
 				descendant.Range = 10
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "but bad" then
+		local mainTexture = "rbxassetid://11035107437"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://11035107437"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -749,11 +816,13 @@ local function ambushSkin(entity)
 				descendant.Range = 10
 			end	
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Double Lighted" then
+		local mainTexture = "rbxassetid://117626246301713"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://117626246301713"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -769,11 +838,13 @@ local function ambushSkin(entity)
 				end)
 			end
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	elseif skin == "Neon" then
+		local mainTexture = "rbxassetid://110494047315151"
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://110494047315151"
+					descendant.Texture = mainTexture
 				end
 			end
 			if descendant:IsA("PointLight") then
@@ -782,6 +853,7 @@ local function ambushSkin(entity)
 				descendant.Color = Color3.fromRGB(57, 255, 20)
 			end
 		end
+		updateAmbushJumpscareImages(mainTexture)
 	end
 end
 
