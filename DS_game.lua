@@ -39,6 +39,9 @@ spawn(function()
 			local path = workspace.CurrentRooms["0"].Assets.GateSetup.GardenGate.Collision
 			riftpos.Anchored = true
 			riftpos.Position = path.Position+path.CFrame.RightVector*10+path.CFrame.LookVector*8
+			riftpos.Transparency=1
+			rifttemplate:PivotTo(riftpos.CFrame)
+			riftpos:Destroy()
 		end	
 	end
 
