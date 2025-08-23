@@ -478,6 +478,7 @@ local function rushSkin(entity)
 				if descendant.Name == "ParticleEmitter" then
 					descendant.Texture = "rbxassetid://11845899956"
 				else
+					descendant.Texture = "rbxassetid://716847870"
 					descendant.Color = ColorSequence.new{
 						ColorSequenceKeypoint.new(0, Color3.fromRGB(10, 10, 80)),
 						ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 50))
@@ -540,16 +541,73 @@ local function rushSkin(entity)
 				end
 			end
 		end
-	elseif skin == "Blitz" then
+	elseif skin == "Stage 3" then
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
 				if descendant.Name == "ParticleEmitter" then
-					descendant.Texture = "rbxassetid://126371141966093"
+					descendant.Texture = "rbxassetid://71095814517056"
 				else
+					descendant.Texture = "rbxassetid://716847870"
 					descendant.Color = ColorSequence.new{
-						ColorSequenceKeypoint.new(0, Color3.fromRGB(85, 107, 47)),
-						ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 100, 0))
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(128, 128, 128))
 					}
+				end
+			end
+		end
+	elseif skin == "Golden" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "ParticleEmitter" then
+					descendant.Texture = "rbxassetid://10859906277"
+				else
+					descendant.Texture = "rbxassetid://716847870"
+					descendant.Color = ColorSequence.new{
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+						ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 252, 153))
+					}
+				end
+			end
+		end
+	elseif skin == "Nightmare" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "ParticleEmitter" then
+					descendant.Texture = "rbxassetid://12426378358"
+				end
+			end
+		end
+	elseif skin == "pewpew" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "ParticleEmitter" then
+					descendant.Texture = "rbxassetid://11004381332"
+				end
+			end
+		end
+	elseif skin == "Blitz" then
+		local useFirst = math.random() < 0.5
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "ParticleEmitter" then
+					if useFirst then
+						descendant.Texture = "rbxassetid://16755073604"
+					else
+						descendant.Texture = "rbxassetid://16755077927"
+					end
+				else
+					descendant.Texture = "rbxassetid://716847870"
+					if useFirst then
+						descendant.Color = ColorSequence.new{
+							ColorSequenceKeypoint.new(0, Color3.fromRGB(29, 75, 22)),
+							ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 138, 56))
+						}
+					else
+						descendant.Color = ColorSequence.new{
+							ColorSequenceKeypoint.new(0, Color3.fromRGB(120, 63, 63)),
+							ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 29, 29))
+						}
+					end
 				end
 			end
 		end
@@ -691,8 +749,42 @@ local function ambushSkin(entity)
 				descendant.Range = 10
 			end	
 		end
+	elseif skin == "Double Lighted" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "ParticleEmitter" then
+					descendant.Texture = "rbxassetid://117626246301713"
+				end
+			end
+			if descendant:IsA("PointLight") then
+				descendant.Brightness = 50
+				descendant.Range = 45
+				spawn(function()
+					while descendant.Parent do
+						descendant.Color = Color3.fromRGB(255, 165, 0)
+						task.wait(0.25)
+						descendant.Color = Color3.fromRGB(0, 0, 255)
+						task.wait(0.25)
+					end
+				end)
+			end
+		end
+	elseif skin == "Neon" then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+				if descendant.Name == "ParticleEmitter" then
+					descendant.Texture = "rbxassetid://110494047315151"
+				end
+			end
+			if descendant:IsA("PointLight") then
+				descendant.Brightness = 25
+				descendant.Range = 45
+				descendant.Color = Color3.fromRGB(57, 255, 20)
+			end
+		end
 	end
 end
+
 local function eyesSkin(entity)
 	task.wait(0.1)
 	local skin = GetCurrentSkin("Eyes")
@@ -787,19 +879,25 @@ local function eyesSkin(entity)
 			end
 		end)
 	elseif skin == "Lookman" then
-		for _, descendant in ipairs(container:GetDescendants()) do
-			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
-				if descendant.Name == "EyesParticle" then
-					descendant.Texture = "rbxassetid://101244281293434"
-				else
-					descendant.Enabled = false
+		spawn(function()
+			while entity.Parent do
+				for _, descendant in ipairs(container:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						if descendant.Name == "EyesParticle" then
+							descendant.Texture = "rbxassetid://101244281293434"
+							descendant.Enabled = true
+						else
+							descendant.Enabled = false
+						end
+					end
+					if descendant:IsA("PointLight") then
+						descendant.Brightness = 0
+						descendant.Range = 0
+					end	
 				end
+				task.wait(0.1)
 			end
-			if descendant:IsA("PointLight") then
-				descendant.Brightness = 0
-				descendant.Range = 0
-			end	
-		end
+		end)
 	end
 end
 
