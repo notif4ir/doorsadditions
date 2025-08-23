@@ -707,75 +707,75 @@ local function eyesSkin(entity)
 				descendant.Brightness = 25
 				descendant.Range = 15
 			end	
-			local eyeParticles = Instance.new("Model")
-			eyeParticles.Name = "eyeParticles"
-
-			local Eyes = Instance.new("ParticleEmitter")
-			Eyes.Brightness = 1.26
-			Eyes.EmissionDirection = Enum.NormalId.Front
-			Eyes.LockedToPart = true
-			Eyes.Rate = 0.2
-			Eyes.Shape = Enum.ParticleEmitterShape.Sphere
-			Eyes.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
-			Eyes.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.5, 0), NumberSequenceKeypoint.new(1, 0.5, 0)})
-			Eyes.Speed = NumberRange.new(0)
-			Eyes.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
-			Eyes.Texture = "rbxassetid://10183789367"
-			Eyes.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
-			Eyes.VelocityInheritance = 0.5
-			Eyes.ZOffset = 2
-			Eyes.Name = "Eyes"
-
-			local Eyes_2 = Eyes:Clone()
-			Eyes_2.Rate = 0.3
-			Eyes_2.Texture = "rbxassetid://10183789209"
-
-			local Eyes_3 = Eyes:Clone()
-			Eyes_3.Rate = 0.36
-			Eyes_3.Texture = "rbxassetid://10183788505"
-
-			local Eyes_4 = Eyes:Clone()
-			Eyes_4.Rate = 0.34
-			Eyes_4.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.35, 0), NumberSequenceKeypoint.new(1, 0.35, 0)})
-			Eyes_4.Texture = "rbxassetid://10183788915"
-
-			local Eyes_5 = Eyes:Clone()
-			Eyes_5.Rate = 0.4
-			Eyes_5.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.7, 0), NumberSequenceKeypoint.new(1, 0.7, 0)})
-			Eyes_5.Texture = "rbxassetid://10183789076"
-
-			local Eyes_6 = Eyes:Clone()
-			Eyes_6.Rate = 0.3
-			Eyes_6.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.98, 0), NumberSequenceKeypoint.new(1, 0.98, 0)})
-			Eyes_6.Texture = "rbxassetid://10183788505"
-
-			Eyes.Parent = eyeParticles
-			Eyes_2.Parent = eyeParticles
-			Eyes_3.Parent = eyeParticles
-			Eyes_4.Parent = eyeParticles
-			Eyes_5.Parent = eyeParticles
-			Eyes_6.Parent = eyeParticles
-
-			for _, particle in ipairs(eyeParticles:GetChildren()) do
-				particle.Parent = container
-			end
-			
-			container.Attachment.Angry.Texture = "rbxassetid://4868646391"
-			container.Attachment.Angry.Rate = 10
-			container.Attachment.Angry.Rotation = NumberRange.new(-5,5)
-			container.Attachment.Angry.LightEmission = 1
-			container.Attachment.Angry.Size = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 6),
-				NumberSequenceKeypoint.new(1, 6)
-			})
-			
-			task.spawn(function()
-				while entity.Parent do
-					disableOtherParticles()
-					task.wait(0.1)
-				end
-			end)
 		end
+		local eyeParticles = Instance.new("Model")
+		eyeParticles.Name = "eyeParticles"
+
+		local Eyes = Instance.new("ParticleEmitter")
+		Eyes.Brightness = 1.26
+		Eyes.EmissionDirection = Enum.NormalId.Front
+		Eyes.LockedToPart = true
+		Eyes.Rate = 0.2
+		Eyes.Shape = Enum.ParticleEmitterShape.Sphere
+		Eyes.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+		Eyes.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.5, 0), NumberSequenceKeypoint.new(1, 0.5, 0)})
+		Eyes.Speed = NumberRange.new(0)
+		Eyes.Squash = NumberSequence.new({NumberSequenceKeypoint.new(0, -1, 0), NumberSequenceKeypoint.new(0.03, -0.47, 0), NumberSequenceKeypoint.new(0.07, -0.17, 0), NumberSequenceKeypoint.new(0.43, -0.12, 0), NumberSequenceKeypoint.new(0.46, -0.39, 0), NumberSequenceKeypoint.new(0.48, -0.73, 0), NumberSequenceKeypoint.new(0.52, -0.73, 0), NumberSequenceKeypoint.new(0.55, -0.15, 0), NumberSequenceKeypoint.new(0.94, -0.17, 0), NumberSequenceKeypoint.new(0.97, -0.25, 0), NumberSequenceKeypoint.new(1, -0.68, 0)})
+		Eyes.Texture = "rbxassetid://10183789367"
+		Eyes.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0, 0), NumberSequenceKeypoint.new(0.46, 0, 0), NumberSequenceKeypoint.new(0.47, 1, 0), NumberSequenceKeypoint.new(0.51, 1, 0), NumberSequenceKeypoint.new(0.53, 0, 0), NumberSequenceKeypoint.new(1, 0, 0)})
+		Eyes.VelocityInheritance = 0.5
+		Eyes.ZOffset = 2
+		Eyes.Name = "Eyes"
+
+		local Eyes_2 = Eyes:Clone()
+		Eyes_2.Rate = 0.3
+		Eyes_2.Texture = "rbxassetid://10183789209"
+
+		local Eyes_3 = Eyes:Clone()
+		Eyes_3.Rate = 0.36
+		Eyes_3.Texture = "rbxassetid://10183788505"
+
+		local Eyes_4 = Eyes:Clone()
+		Eyes_4.Rate = 0.34
+		Eyes_4.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.35, 0), NumberSequenceKeypoint.new(1, 0.35, 0)})
+		Eyes_4.Texture = "rbxassetid://10183788915"
+
+		local Eyes_5 = Eyes:Clone()
+		Eyes_5.Rate = 0.4
+		Eyes_5.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.7, 0), NumberSequenceKeypoint.new(1, 0.7, 0)})
+		Eyes_5.Texture = "rbxassetid://10183789076"
+
+		local Eyes_6 = Eyes:Clone()
+		Eyes_6.Rate = 0.3
+		Eyes_6.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.98, 0), NumberSequenceKeypoint.new(1, 0.98, 0)})
+		Eyes_6.Texture = "rbxassetid://10183788505"
+
+		Eyes.Parent = eyeParticles
+		Eyes_2.Parent = eyeParticles
+		Eyes_3.Parent = eyeParticles
+		Eyes_4.Parent = eyeParticles
+		Eyes_5.Parent = eyeParticles
+		Eyes_6.Parent = eyeParticles
+
+		for _, particle in ipairs(eyeParticles:GetChildren()) do
+			particle.Parent = container
+		end
+
+		container.Attachment.Angry.Texture = "rbxassetid://4868646391"
+		container.Attachment.Angry.Rate = 10
+		container.Attachment.Angry.Rotation = NumberRange.new(-5,5)
+		container.Attachment.Angry.LightEmission = 1
+		container.Attachment.Angry.Size = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, 6),
+			NumberSequenceKeypoint.new(1, 6)
+		})
+
+		task.spawn(function()
+			while entity.Parent do
+				disableOtherParticles()
+				task.wait(0.1)
+			end
+		end)
 	elseif skin == "Lookman" then
 		for _, descendant in ipairs(container:GetDescendants()) do
 			if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
