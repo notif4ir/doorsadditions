@@ -967,7 +967,100 @@ local function eyesSkin(entity)
 						descendant.Range = 0
 					end	
 				end
-				task.wait(0.1)
+				task.wait()
+			end
+		end)
+	elseif skin == "Kawaii" then
+		spawn(function()
+			while entity.Parent do
+				for _, descendant in ipairs(container:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						if descendant.Name == "EyesParticle" then
+							descendant.Texture = "rbxassetid://12568774779"
+							descendant.Enabled = true
+						end
+					end
+				end
+				task.wait()
+			end
+		end)
+	elseif skin == "Seeys" then
+		spawn(function()
+			while entity.Parent do
+				for _, descendant in ipairs(container:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						if descendant.Name == "EyesParticle" then
+							descendant.Texture = "rbxassetid://16458340255"
+							descendant.Enabled = true
+						else
+							descendant.Enabled = false
+						end
+					end
+					if descendant:IsA("PointLight") then
+						descendant.Brightness = 0
+						descendant.Range = 0
+					end	
+				end
+				task.wait()
+			end
+		end)
+	elseif skin == "Seek Eye" then
+		spawn(function()
+			while entity.Parent do
+				for _, descendant in ipairs(container:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						if descendant.Name == "EyesParticle" then
+							descendant.Texture = "rbxassetid://11244133614"
+							descendant.Enabled = true
+						else
+							descendant.Enabled = false
+						end
+					end
+					if descendant:IsA("PointLight") then
+						descendant.Brightness = 0
+						descendant.Range = 0
+					end	
+				end
+				task.wait()
+			end
+		end)
+	elseif skin == "but bad" then
+		spawn(function()
+			while entity.Parent do
+				for _, descendant in ipairs(container:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						if descendant.Name == "EyesParticle" then
+							descendant.Texture = "rbxassetid://11697351921"
+							descendant.Enabled = true
+						else
+							descendant.Enabled = false
+						end
+					end
+					if descendant:IsA("PointLight") then
+						descendant.Brightness = 0
+						descendant.Range = 0
+					end	
+				end
+				task.wait()
+			end
+		end)
+	elseif skin == "Halt eyes" then
+		spawn(function()
+			while entity.Parent do
+				for _, descendant in ipairs(container:GetDescendants()) do
+					if descendant:IsA("ParticleEmitter") then
+						if descendant.Name == "EyesParticle" then
+							descendant.Texture = "rbxassetid://112372068839719"
+							descendant.Enabled = true
+						else
+							descendant.Enabled = false
+						end
+					end
+					if descendant:IsA("PointLight") then
+						descendant.Color = Color3.fromRGB(74, 207, 255)
+					end	
+				end
+				task.wait()
 			end
 		end)
 	end
