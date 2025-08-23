@@ -32,7 +32,14 @@ spawn(function()
 			room0.RedRift:Destroy()
 		end
 		rifttemplate.Parent = room0
-		rifttemplate:PivotTo(room0.RiftSpawn.PrimaryPart.CFrame + Vector3.new(-3, 0, -10))
+		if room0:FindFirstChild("RiftSpawn") then
+			rifttemplate:PivotTo(room0.RiftSpawn.PrimaryPart.CFrame + Vector3.new(-3, 0, -10))
+		elseif game.PlaceId == 6839171747 then
+			local riftpos = Instance.new("Part", game.Workspace)
+			local path = workspace.CurrentRooms["0"].Assets.GateSetup.GardenGate.Collision
+			riftpos.Anchored = true
+			riftpos.Position = path.Position+path.CFrame.RightVector*10+path.CFrame.LookVector*8
+		end	
 	end
 
 	rifttemplate.Center:Destroy()
