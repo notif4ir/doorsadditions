@@ -3,7 +3,6 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 local RiftLeverGlass = Instance.new("Tool")
-RiftLeverGlass.TextureId = "rbxassetid://1523548846"
 RiftLeverGlass.Grip = CFrame.new(0, 0, 0.5, 1, 0, 0, 0, -0, 1, 0, -1, -0)
 RiftLeverGlass.GripForward = Vector3.new(0, -1, 0)
 RiftLeverGlass.GripPos = Vector3.new(0, 0, 0.5)
@@ -90,7 +89,7 @@ RainbowShards.Parent = ParticlesIn
 
 local cooldown = false
 local cooldownTime = 60
-local showTime = 20
+local showTime = 10
 
 local function createHighlight(target, color)
 	local highlight = Instance.new("Highlight")
