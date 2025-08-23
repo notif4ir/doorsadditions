@@ -189,8 +189,12 @@ local skins = {
 		{Name="Plushie", Image="rbxassetid://12978732658", Cost=100},
 		{Name="Tuff", Image="rbxassetid://87088896638971", Cost=100},
 		{Name="Stage 2", Image="rbxassetid://96123320328002", Cost=100},
-		{Name="Blitz", Image="rbxassetid://126371141966093", Cost=75},
-		{Name="veri sad", Image="rbxassetid://14229414086", Cost=50}
+		{Name="Blitz", Image="rbxassetid://16755073604", Cost=100},
+		{Name="veri sad", Image="rbxassetid://14229414086", Cost=50},
+		{Name="pewpew", Image="rbxassetid://11004381332", Cost=50},
+		{Name="Golden", Image="rbxassetid://10859906277", Cost=75},
+		{Name="Nightmare", Image="rbxassetid://12426378358", Cost=50},
+		{Name="Stage 3", Image="rbxassetid://71095814517056", Cost=200},
 	},
 	Ambush = {
 		{Name="Old", Image="rbxassetid://11387541299", Cost=50},
@@ -202,6 +206,8 @@ local skins = {
 		{Name="Trolololo", Image="rbxassetid://11879070081", Cost=75},
 		{Name="veri sad", Image="rbxassetid://73075323354438", Cost=50},
 		{Name="but bad", Image="rbxassetid://11035107437", Cost=25},
+		{Name="Double Lighted", Image="rbxassetid://117626246301713", Cost=100},
+		{Name="Neon", Image="rbxassetid://110494047315151", Cost=50},
 	},
 	Eyes = {
 		{Name="Old", Image="rbxassetid://10183789367", Cost=100},
