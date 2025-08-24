@@ -255,6 +255,10 @@ end
 
 game.Workspace.CurrentRooms.ChildAdded:Connect(setupRoom)
 
+local function loadData()
+	return HttpService:JSONDecode(readfile(dataFile))
+end
+
 local redriftFile = "DSKINS_REDRIFTDATA.json"
 
 local RunService = game:GetService("RunService")
@@ -674,7 +678,7 @@ local function rushSkin(entity)
 								custom.ParticleColor[1],
 								custom.ParticleColor[2],
 								custom.ParticleColor[3]
-							))
+								))
 						}
 					end
 				end
@@ -1194,7 +1198,7 @@ if currentMap == "Rusty" then
 	game.DescendantAdded:Connect(rustify)
 
 elseif currentMap == "Retro" then
-	
+
 	local Players = game:GetService("Players")
 	local player = Players.LocalPlayer
 	local clearMeshIds = true
@@ -1338,9 +1342,9 @@ elseif currentMap == "Retro" then
 			end
 		end)
 	end
-	
+
 elseif currentMap == "Inverted" then
-	
+
 	local function invertColor(color)
 		return Color3.new(1 - color.R, 1 - color.G, 1 - color.B)
 	end
@@ -1370,9 +1374,9 @@ elseif currentMap == "Inverted" then
 	end
 
 	workspace.DescendantAdded:Connect(invertInstance)
-	
+
 elseif currentMap == "Pixel" then
-	
+
 	local player = game.Players.LocalPlayer
 	local camera = workspace.CurrentCamera
 	local RunService = game:GetService("RunService")
@@ -1471,7 +1475,7 @@ elseif currentMap == "Pixel" then
 			pixelIndex = 0
 		end
 	end)
-	
+
 end
 
 -- run for existing entities
