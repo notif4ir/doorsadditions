@@ -641,3 +641,78 @@ _G.DSkin.GetCustomById = function(char, id)
 	end
 	return nil
 end
+
+spawn(function()
+	local Players = game:GetService("Players")
+	local HttpService = game:GetService("HttpService")
+	local LocalPlayer = Players.LocalPlayer
+	local CodeInput = LocalPlayer.PlayerGui.GlobalUI.Shop.ScrollingShop.Code.CodeInput
+	local dataFile = "DSKINS_PLAYERDATA"
+	local codeFile = "DSKINS_RDCDS"
+
+	if not pcall(function() readfile(codeFile) end) then
+		writefile(codeFile, "")
+	end
+
+	local redeemedCodes = {}
+	local savedData = readfile(codeFile)
+	for code in string.gmatch(savedData, "[^\n]+") do
+		redeemedCodes[code] = true
+	end
+
+	local validCodes = {
+		["F4IR"] = 25,
+		["CUSTOMSKINS"] = 25,
+	}
+
+	local function ensureData()
+		if not isfile(dataFile) then
+			writefile(dataFile, HttpService:JSONEncode({currency = 0, bought = {}, equipped = {}}))
+		end
+		local data = HttpService:JSONDecode(readfile(dataFile))
+		data.currency = data.currency or 0
+		data.bought = data.bought or {}
+		data.equipped = data.equipped or {}
+		writefile(dataFile, HttpService:JSONEncode(data))
+		return data
+	end
+
+	local function writeData(data)
+		writefile(dataFile, HttpService:JSONEncode(data))
+	end
+
+	local function AddCurrency(amount)
+		local data = ensureData()
+		data.currency = data.currency + amount
+		writeData(data)
+	end
+
+	local function redeemCode(code)
+		code = code:upper()
+		if redeemedCodes[code] then
+			warn("Code already redeemed!")
+			return
+		end
+		local reward = validCodes[code]
+		if reward then
+			redeemedCodes[code] = true
+			local newData = ""
+			for c,_ in pairs(redeemedCodes) do
+				newData = newData .. c .. "\n"
+			end
+			writefile(codeFile, newData)
+			AddCurrency(reward)
+			print("Code redeemed: " .. code .. " | Currency added: " .. reward)
+		else
+			warn("Invalid code!")
+		end
+	end
+
+	CodeInput.FocusLost:Connect(function(enterPressed)
+		if enterPressed then
+			local code = CodeInput.Text
+			redeemCode(code)
+			CodeInput.Text = ""
+		end
+	end)
+end)
