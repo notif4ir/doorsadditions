@@ -179,8 +179,13 @@ buttonClone.MouseButton1Click:Connect(function()
 	bottomButtons.Visible = false
 end)
 
-local characters = {"Rush","Ambush","Eyes","Screech","Seek","Figure"}
+local characters = {"Map","Rush","Ambush","Eyes","Screech","Seek","Figure"}
 local skins = {
+	Map = {
+		{Name="Retro", Image="rbxassetid://14663229942", Cost=100},
+		{Name="Rusty", Image="rbxassetid://17847838254", Cost=75},
+		{Name="Inverted", Image="rbxassetid://96498567035505", Cost=50},
+	},
 	Rush = {
 		{Name="Old", Image="rbxassetid://11845899956", Cost=50},
 		{Name="but bad", Image="rbxassetid://11027732448", Cost=25},
