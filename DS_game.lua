@@ -382,7 +382,7 @@ local function handleRedRiftWithdraw(redrift)
 			updateRedRiftGui(redrift)
 			return
 		end
-		
+
 		if data.sourceLink == "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/leverglass.lua" then
 			data.sourceLink = "https://raw.githubusercontent.com/notif4ir/doorsadditions/refs/heads/main/tools/other/riftleverglass.lua"
 		end
@@ -1117,6 +1117,205 @@ local function connectEntitySkins(entity)
 	elseif entity.Name == "Eyes" then
 		eyesSkin(entity)
 	end
+end
+
+local currentMap = GetCurrentSkin("Map")
+
+if currentMap == "Rusty" then
+
+	local function rustify(part)
+		if part:IsA("BasePart") then
+			part.Material = Enum.Material.CorrodedMetal
+			if part:IsA("MeshPart") then
+				part.TextureID = ""
+			end
+		end
+	end
+
+	for i,part in game:GetDescendants() do
+		rustify(part)
+	end
+
+	game.DescendantAdded:Connect(rustify)
+
+elseif currentMap == "Retro" then
+	
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
+	local clearMeshIds = true
+	local ReplaceMeshParts = true
+
+	local meshReplacementTable = {}
+
+	local function isInPlayerCharacter(obj)
+		for _, p in ipairs(Players:GetPlayers()) do
+			if p.Character and obj:IsDescendantOf(p.Character) then
+				return true
+			end
+		end
+		return false
+	end
+
+	local function applyTexture(part)
+		local assetId = "http://www.roblox.com/asset/?id=3014551673"
+		local baseTransparency = 0.75
+		local adjustedTransparency = baseTransparency + (part.Transparency * (1 - baseTransparency))
+		if adjustedTransparency > 1 then
+			adjustedTransparency = 1
+		end
+
+		for _, face in ipairs({"Top", "Bottom", "Left", "Right", "Front", "Back"}) do
+			local texture = Instance.new("Texture")
+			texture.Texture = assetId
+			texture.Face = Enum.NormalId[face]
+			texture.Transparency = adjustedTransparency
+			texture.StudsPerTileU = 2
+			texture.StudsPerTileV = 2
+			texture.Parent = part
+		end
+	end
+
+	local function createReplacementPart(mesh)
+		local part = Instance.new("Part")
+		part.Size = mesh.Size
+		part.CFrame = mesh.CFrame
+		part.Anchored = mesh.Anchored
+		part.CanCollide = false
+		part.Material = mesh.Material
+		part.Color = mesh.Color
+		part.TopSurface = Enum.SurfaceType.Studs
+		part.BottomSurface = Enum.SurfaceType.Studs
+		part.LeftSurface = Enum.SurfaceType.Studs
+		part.RightSurface = Enum.SurfaceType.Studs
+		part.FrontSurface = Enum.SurfaceType.Studs
+		part.BackSurface = Enum.SurfaceType.Studs
+		part.Transparency = mesh.Transparency
+		part.Parent = mesh.Parent
+		return part
+	end
+
+	local function process(obj)
+		if isInPlayerCharacter(obj) then
+			return
+		end
+
+		if obj:IsA("MeshPart") then
+			obj.Material = Enum.Material.Plastic
+			if clearMeshIds then
+				--obj.MeshId = ""
+			end
+			if ReplaceMeshParts then
+				if not meshReplacementTable[obj] then
+					local replacement = createReplacementPart(obj)
+					meshReplacementTable[obj] = {part = replacement, originalTransparency = obj.Transparency}
+				end
+				obj.Transparency = 1
+			end
+			for _, child in ipairs(obj:GetChildren()) do
+				if child:IsA("Texture") then
+					child:Destroy()
+				end
+			end
+			applyTexture(obj)
+		elseif obj:IsA("SpecialMesh") then
+			obj.Parent.Material = Enum.Material.Plastic
+			if clearMeshIds then
+				obj.MeshId = ""
+			end
+			for _, child in ipairs(obj:GetChildren()) do
+				if child:IsA("Texture") then
+					child:Destroy()
+				end
+			end
+			applyTexture(obj.Parent)
+		elseif obj:IsA("BasePart") then
+			obj.Material = Enum.Material.Plastic
+			obj.TopSurface = Enum.SurfaceType.Studs
+			obj.BottomSurface = Enum.SurfaceType.Studs
+			obj.LeftSurface = Enum.SurfaceType.Studs
+			obj.RightSurface = Enum.SurfaceType.Studs
+			obj.FrontSurface = Enum.SurfaceType.Studs
+			obj.BackSurface = Enum.SurfaceType.Studs
+			for _, child in ipairs(obj:GetChildren()) do
+				if child:IsA("Texture") then
+					local face = child.Face
+					child:Destroy()
+					if face == Enum.NormalId.Top then
+						obj.TopSurface = Enum.SurfaceType.Weld
+					elseif face == Enum.NormalId.Bottom then
+						obj.BottomSurface = Enum.SurfaceType.Weld
+					elseif face == Enum.NormalId.Left then
+						obj.LeftSurface = Enum.SurfaceType.Weld
+					elseif face == Enum.NormalId.Right then
+						obj.RightSurface = Enum.SurfaceType.Weld
+					elseif face == Enum.NormalId.Front then
+						obj.FrontSurface = Enum.SurfaceType.Weld
+					elseif face == Enum.NormalId.Back then
+						obj.BackSurface = Enum.SurfaceType.Weld
+					end
+				end
+			end
+		end
+	end
+
+	for _, obj in ipairs(game:GetDescendants()) do
+		process(obj)
+	end
+
+	game.DescendantAdded:Connect(function(obj)
+		process(obj)
+	end)
+
+	if ReplaceMeshParts then
+		game:GetService("RunService").RenderStepped:Connect(function()
+			for mesh, data in pairs(meshReplacementTable) do
+				local part = data.part
+				if mesh.Parent then
+					part.Size = mesh.Size
+					part.CFrame = mesh.CFrame
+					part.Anchored = mesh.Anchored
+					part.Material = mesh.Material
+					part.Color = mesh.Color
+				else
+					part:Destroy()
+					meshReplacementTable[mesh] = nil
+				end
+			end
+		end)
+	end
+	
+elseif currentMap == "Inverted" then
+	
+	local function invertColor(color)
+		return Color3.new(1 - color.R, 1 - color.G, 1 - color.B)
+	end
+
+	local function invertColorSequence(seq)
+		local keypoints = {}
+		for _, key in ipairs(seq.Keypoints) do
+			table.insert(keypoints, ColorSequenceKeypoint.new(key.Time, invertColor(key.Value)))
+		end
+		return ColorSequence.new(keypoints)
+	end
+
+	local function invertInstance(instance)
+		if instance:IsA("BasePart") then
+			instance.Color = invertColor(instance.Color)
+		elseif instance:IsA("ParticleEmitter") then
+			instance.Color = invertColorSequence(instance.Color)
+		elseif instance:IsA("Trail") or instance:IsA("Beam") then
+			if instance.Color then
+				instance.Color = invertColorSequence(instance.Color)
+			end
+		end
+	end
+
+	for _, instance in pairs(workspace:GetDescendants()) do
+		invertInstance(instance)
+	end
+
+	workspace.DescendantAdded:Connect(invertInstance)
+	
 end
 
 -- run for existing entities
