@@ -1316,6 +1316,107 @@ elseif currentMap == "Inverted" then
 
 	workspace.DescendantAdded:Connect(invertInstance)
 	
+elseif currentMap == "Pixel" then
+	
+	local player = game.Players.LocalPlayer
+	local camera = workspace.CurrentCamera
+	local RunService = game:GetService("RunService")
+
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.ResetOnSpawn = false
+	screenGui.DisplayOrder = -9999999
+	screenGui.Parent = player:WaitForChild("PlayerGui")
+
+	local pixelSize = 30
+	local screenWidth = math.ceil(camera.ViewportSize.X / pixelSize)
+	local screenHeight = math.ceil(camera.ViewportSize.Y / pixelSize)
+	local pixels = {}
+	local pixelColors = {}
+
+	for y = 0, screenHeight-1 do
+		pixels[y] = {}
+		pixelColors[y] = {}
+		for x = 0, screenWidth-1 do
+			local frame = Instance.new("Frame")
+			frame.Size = UDim2.new(0, pixelSize, 0, pixelSize)
+			frame.Position = UDim2.new(0, x * pixelSize, 0, y * pixelSize)
+			frame.BackgroundColor3 = Color3.new(0,0,0)
+			frame.BorderSizePixel = 0
+			frame.Parent = screenGui
+			pixels[y][x] = frame
+			pixelColors[y][x] = Color3.new(0,0,0)
+		end
+	end
+
+	local function blendColors(base, overlay, alpha)
+		return Color3.new(
+			overlay.R * alpha + base.R * (1-alpha),
+			overlay.G * alpha + base.G * (1-alpha),
+			overlay.B * alpha + base.B * (1-alpha)
+		)
+	end
+
+	local function raycastPixel(x, y)
+		local origin = camera.CFrame.Position
+		local viewportPoint = Vector2.new(x*pixelSize + pixelSize/2, y*pixelSize + pixelSize/2)
+		local direction = camera:ScreenPointToRay(viewportPoint.X, viewportPoint.Y).Direction * 500
+
+		local raycastParams = RaycastParams.new()
+		raycastParams.FilterDescendantsInstances = {player.Character}
+		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+
+		local color = Color3.new(0,0,0)
+		local remainingTransparency = 1
+
+		for i = 1, 5 do
+			local result = workspace:Raycast(origin, direction, raycastParams)
+			if not result then break end
+			local part = result.Instance
+			local alpha = 1 - math.clamp(part.Transparency, 0, 1)
+			color = blendColors(color, part.Color, alpha * remainingTransparency)
+			remainingTransparency = remainingTransparency * (1 - alpha)
+			origin = result.Position + direction.Unit * 0.1
+		end
+
+		return color
+	end
+
+	local pixelIndex = 0
+	local totalPixels = screenWidth * screenHeight
+	local calculationComplete = false
+
+	local function calculatePixelsStep()
+		local stepsPerFrame = 500
+		for i = 1, stepsPerFrame do
+			local y = math.floor(pixelIndex / screenWidth)
+			local x = pixelIndex % screenWidth
+			pixelColors[y][x] = raycastPixel(x, y)
+			pixelIndex = pixelIndex + 1
+			if pixelIndex >= totalPixels then
+				calculationComplete = true
+				break
+			end
+		end
+	end
+
+	RunService.Heartbeat:Connect(function()
+		if not calculationComplete then
+			calculatePixelsStep()
+		end
+	end)
+
+	RunService.RenderStepped:Connect(function()
+		if calculationComplete then
+			for y = 0, screenHeight-1 do
+				for x = 0, screenWidth-1 do
+					pixels[y][x].BackgroundColor3 = pixelColors[y][x]
+				end
+			end
+			calculationComplete = false
+			pixelIndex = 0
+		end
+	end)
+	
 end
 
 -- run for existing entities
@@ -1329,3 +1430,133 @@ end
 -- connect for new ones
 game.Workspace.ChildAdded:Connect(connectEntitySkins)
 game.Workspace.CurrentCamera.ChildAdded:Connect(connectEntitySkins)
+
+spawn(function()
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+	local rootPart = character:WaitForChild("HumanoidRootPart")
+	local userInput = game:GetService("UserInputService")
+	local runService = game:GetService("RunService")
+
+	local acceleration = 100
+	local deceleration = 120
+	local stopThreshold = 0.1
+	local sprintMultiplier = 1.6
+	local lowStaminaMultiplier = 0.3
+	local isSprinting = false
+	local currentVelocity = Vector3.new()
+
+	local maxStamina = 100
+	local currentStamina = maxStamina
+	local staminaDrain = 20
+	local staminaRegen = 4 -- super slow
+	local canSprint = true
+
+	if not humanoid:FindFirstChild("custom") then
+		local folder = Instance.new("Folder")
+		folder.Name = "custom"
+		folder.Parent = humanoid
+		local normalVal = Instance.new("NumberValue")
+		normalVal.Name = "Normal"
+		normalVal.Value = 1
+		normalVal.Parent = folder
+		local sprintVal = Instance.new("NumberValue")
+		sprintVal.Name = "Sprint"
+		sprintVal.Value = sprintMultiplier
+		sprintVal.Parent = folder
+	end
+
+	local custom = humanoid:WaitForChild("custom")
+	local normalMultiplier = custom:WaitForChild("Normal")
+	local sprintMultiplierValue = custom:WaitForChild("Sprint")
+
+	-- Input
+	userInput.InputBegan:Connect(function(input)
+		if input.KeyCode == Enum.KeyCode.Space then
+			isSprinting = true
+		end
+	end)
+
+	userInput.InputEnded:Connect(function(input)
+		if input.KeyCode == Enum.KeyCode.Space then
+			isSprinting = false
+		end
+	end)
+
+	local mainFrame = player:WaitForChild("PlayerGui"):WaitForChild("MainUI"):WaitForChild("MainFrame")
+	local healthBar = mainFrame:WaitForChild("Healthbar")
+	local barTemplate = healthBar:WaitForChild("Bar")
+
+	if barTemplate:FindFirstChild("HurtBar") then barTemplate.HurtBar:Destroy() end
+	if barTemplate:FindFirstChild("Shield Bar") then barTemplate["Shield Bar"]:Destroy() end
+
+	local staminaFrame = barTemplate:Clone()
+	staminaFrame.Name = "StaminaBar"
+	staminaFrame.Position = barTemplate.Position - UDim2.new(0,0,0,25)
+	staminaFrame.Parent = barTemplate.Parent
+	staminaFrame.Visible = true
+	staminaFrame.UIStroke.Color = Color3.fromRGB(85,170,255)
+	staminaFrame.Bar.BackgroundColor3 = Color3.fromRGB(0,170,255)
+	staminaFrame.Bar.Size = UDim2.new(1,0,1,0)
+	staminaFrame.Bar.Visible = true
+
+	runService.RenderStepped:Connect(function(delta)
+		local cam = workspace.CurrentCamera
+		local forward = Vector3.new(cam.CFrame.LookVector.X,0,cam.CFrame.LookVector.Z).Unit
+		local right = Vector3.new(cam.CFrame.RightVector.X,0,cam.CFrame.RightVector.Z).Unit
+
+		local inputDir = Vector3.new()
+		if userInput:IsKeyDown(Enum.KeyCode.W) then inputDir = inputDir + Vector3.new(0,0,1) end
+		if userInput:IsKeyDown(Enum.KeyCode.S) then inputDir = inputDir + Vector3.new(0,0,-1) end
+		if userInput:IsKeyDown(Enum.KeyCode.A) then inputDir = inputDir + Vector3.new(-1,0,0) end
+		if userInput:IsKeyDown(Enum.KeyCode.D) then inputDir = inputDir + Vector3.new(1,0,0) end
+		if inputDir.Magnitude > 0 then inputDir = inputDir.Unit end
+
+		-- Stamina drain/regeneration
+		if isSprinting and currentStamina > 0 and inputDir.Magnitude > 0 then
+			currentStamina = math.clamp(currentStamina - staminaDrain * delta, 0, maxStamina)
+			canSprint = true
+		elseif inputDir.Magnitude == 0 then
+			-- regenerate slowly when standing still
+			currentStamina = math.clamp(currentStamina + staminaRegen * delta, 0, maxStamina)
+			if currentStamina > 0 then
+				canSprint = true
+			end
+		else
+			if currentStamina <= 0 then
+				currentStamina = 0
+				canSprint = false
+			end
+		end
+
+		local multiplier = normalMultiplier.Value
+		if isSprinting and canSprint and inputDir.Magnitude > 0 then
+			multiplier = sprintMultiplierValue.Value
+		elseif currentStamina == 0 then
+			multiplier = lowStaminaMultiplier
+		end
+		local speed = humanoid.WalkSpeed * multiplier
+		local targetVelocity = (forward * inputDir.Z + right * inputDir.X) * speed
+
+		if inputDir.Magnitude > 0 then
+			currentVelocity = currentVelocity:Lerp(targetVelocity, math.clamp(acceleration * delta / speed, 0, 1))
+		else
+			currentVelocity = currentVelocity:Lerp(Vector3.new(), math.clamp(deceleration * delta / speed, 0, 1))
+			if currentVelocity.Magnitude < stopThreshold then
+				currentVelocity = Vector3.new()
+			end
+		end
+
+		local horizontalVelocity = Vector3.new(rootPart.Velocity.X,0,rootPart.Velocity.Z)
+		local velocityDelta = currentVelocity - horizontalVelocity
+		rootPart.Velocity = rootPart.Velocity + velocityDelta
+
+		if currentVelocity.Magnitude > 0 then
+			rootPart.CFrame = CFrame.new(rootPart.Position, rootPart.Position + forward)
+		end
+
+		local targetSize = UDim2.new(currentStamina/maxStamina,0,1,0)
+		staminaFrame.Bar.Size = staminaFrame.Bar.Size:Lerp(targetSize, math.clamp(5*delta,0,1))
+	end)
+end)
