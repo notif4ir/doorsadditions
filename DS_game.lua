@@ -653,6 +653,34 @@ local function rushSkin(entity)
 			end
 		end
 		updateRushJumpscareImages(mainTexture)
+	elseif string.find(skin,"custom_") then
+		local slotId = tonumber(string.match(skin,"custom_(%d+)"))
+		local data = loadData()
+		local custom
+		for _, s in ipairs(data.customSkins["Rush"] or {}) do
+			if s.Id == slotId then custom = s break end
+		end
+		if custom then
+			local mainTexture = custom.Image
+			for _, descendant in ipairs(container:GetDescendants()) do
+				if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+					if descendant.Name == "ParticleEmitter" then
+						descendant.Texture = mainTexture
+					else
+						descendant.Texture = custom.ParticleTexture ~= "" and custom.ParticleTexture or "rbxassetid://716847870"
+						descendant.Color = ColorSequence.new{
+							ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+							ColorSequenceKeypoint.new(1, Color3.fromRGB(
+								custom.ParticleColor[1],
+								custom.ParticleColor[2],
+								custom.ParticleColor[3]
+							))
+						}
+					end
+				end
+			end
+		end
+		updateRushJumpscareImages(mainTexture)
 	end
 end
 
@@ -854,6 +882,33 @@ local function ambushSkin(entity)
 			end
 		end
 		updateAmbushJumpscareImages(mainTexture)
+	elseif string.find(skin,"custom_") then
+		local slotId = tonumber(string.match(skin,"custom_(%d+)"))
+		local data = loadData()
+		local custom
+		for _, s in ipairs(data.customSkins["Ambush"] or {}) do
+			if s.Id == slotId then custom = s break end
+		end
+		if custom then
+			local mainTexture = custom.Image
+			for _, descendant in ipairs(container:GetDescendants()) do
+				if descendant:IsA("ParticleEmitter") and descendant.Parent.Name == "Attachment" then
+					if descendant.Name == "ParticleEmitter" then
+						descendant.Texture = mainTexture
+					end
+				end
+				if descendant:IsA("PointLight") then
+					descendant.Brightness = 25555556
+					descendant.Range = 15
+					descendant.Color = Color3.fromRGB(
+						custom.ParticleColor[1],
+						custom.ParticleColor[2],
+						custom.ParticleColor[3]
+					)
+				end	
+			end
+			updateAmbushJumpscareImages(mainTexture)
+		end
 	end
 end
 
@@ -1560,3 +1615,4 @@ spawn(function()
 		staminaFrame.Bar.Size = staminaFrame.Bar.Size:Lerp(targetSize, math.clamp(5*delta,0,1))
 	end)
 end)
+
