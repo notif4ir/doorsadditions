@@ -683,8 +683,8 @@ local function rushSkin(entity)
 					end
 				end
 			end
+			updateRushJumpscareImages(mainTexture)
 		end
-		updateRushJumpscareImages(mainTexture)
 	end
 end
 
