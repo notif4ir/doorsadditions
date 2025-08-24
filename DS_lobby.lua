@@ -45,11 +45,15 @@ spawn(function()
 	local HttpService = game:GetService("HttpService")
 	local LocalPlayer = Players.LocalPlayer
 	local CodeInput = LocalPlayer.PlayerGui.GlobalUI.Shop.ScrollingShop.Code.CodeInput
-	local dataFile = "DSKINS_PLAYERDATA"
-	local codeFile = "DSKINS_RDCDS"
+	local dataFile = "dskin_data.json"
+	local codeFile = "dskin_redeemedcodes.json"
 
 	if not pcall(function() readfile(codeFile) end) then
 		writefile(codeFile, "")
+	end
+
+	if not pcall(function() readfile(dataFile) end) then
+		writefile(dataFile, HttpService:JSONEncode({currency = 0, bought = {}, equipped = {}}))
 	end
 
 	local redeemedCodes = {}
@@ -64,10 +68,13 @@ spawn(function()
 	}
 
 	local function ensureData()
-		if not isfile(dataFile) then
-			writefile(dataFile, HttpService:JSONEncode({currency = 0, bought = {}, equipped = {}}))
+		local data
+		local ok, result = pcall(function() return HttpService:JSONDecode(readfile(dataFile)) end)
+		if ok and type(result) == "table" then
+			data = result
+		else
+			data = {currency = 0, bought = {}, equipped = {}}
 		end
-		local data = HttpService:JSONDecode(readfile(dataFile))
 		data.currency = data.currency or 0
 		data.bought = data.bought or {}
 		data.equipped = data.equipped or {}
@@ -716,3 +723,4 @@ _G.DSkin.GetCustomById = function(char, id)
 	end
 	return nil
 end
+
