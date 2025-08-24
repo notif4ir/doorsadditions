@@ -183,6 +183,7 @@ local characters = {"Map","Rush","Ambush","Eyes","Screech","Seek","Figure"}
 local skins = {
 	Map = {
 		{Name="Retro", Image="rbxassetid://14663229942", Cost=100},
+		{Name="Pixel", Image="rbxassetid://13569233822", Cost=75},
 		{Name="Rusty", Image="rbxassetid://17847838254", Cost=75},
 		{Name="Inverted", Image="rbxassetid://96498567035505", Cost=50},
 	},
